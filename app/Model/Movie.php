@@ -12,10 +12,10 @@ class Movie extends Model
 
     /**
      * @param array     $movieResult movie object from search result
-     * @param PremFile  $premFile
-     * @param \stdClass $guessed
+     * @param PremFile  $premFile prem file
+     * @param \stdClass $guessed guessed instance
      *
-     * @return Movie new build movie from given movie result and prem file
+     * @return Movie movie model instance created from given movie result and prem file
      */
     public static function build(array $movieResult, PremFile $premFile, \stdClass $guessed)
     {

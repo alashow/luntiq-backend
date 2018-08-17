@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'files' => [
         // files with these extensions will be added to files database
         'supported' => [

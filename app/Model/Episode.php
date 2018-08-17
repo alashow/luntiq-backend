@@ -15,7 +15,7 @@ class Episode extends Model
      * @param array    $seasonResult  season object from show result
      * @param PremFile $premFile
      *
-     * @return Episode new build episode from given episode result, show result, prem file
+     * @return Episode episode model instance created from given episode result, show result, prem file
      */
     public static function build(array $episodeResult, array $seasonResult, $premFile)
     {
@@ -47,7 +47,7 @@ class Episode extends Model
 
     /**
      * Safely Save the episode.
-     * If no duplicates just save it. If there is duplicates, compare file sizes of and choose the one with largest file size (hoping it's the best quality).
+     * If no duplicates it just saves it. If there is duplicates, compares file sizes and chooses the one with largest file size (hoping it's the best quality).
      *
      * @return bool saved this one if true, otherwise didn't save and the other/existing one chosen.
      */

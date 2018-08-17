@@ -27,10 +27,10 @@ class Season extends Model
     }
 
     /**
-     * @param array $seasonResult season object from search result
-     * @param array $showResult   show object from show result
+     * @param array $seasonResult season object from search result.
+     * @param array $showResult   show object from show result.
      *
-     * @return array new build season fields from given season result and show result
+     * @return array season model fields from given season result and show result.
      */
     public static function build(array $seasonResult, array $showResult)
     {

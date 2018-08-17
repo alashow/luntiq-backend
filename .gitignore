@@ -2,8 +2,11 @@
 /public/hot
 /public/storage
 /storage/*.key
+
 /public/js
 /public/css
+public/mix-manifest.json
+
 /vendor
 /.idea
 /.vscode

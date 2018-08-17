@@ -29,7 +29,7 @@ class Show extends Model
     /**
      * @param array $showResult show object from search result
      *
-     * @return array new build show fields from given show result
+     * @return array show model fields from given show result
      */
     public static function build(array $showResult)
     {
@@ -55,7 +55,7 @@ class Show extends Model
     }
 
     /**
-     * Check if
+     * Check if a show already exists in database.
      *
      * @param $showResult
      *

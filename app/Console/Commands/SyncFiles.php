@@ -65,11 +65,7 @@ class SyncFiles extends Command
             // do something about existing files
             $outdatedFiles = $this->diffAndUpdateExisting($existingFiles);
 
-            if (! empty($addedFiles) || ! empty($outdatedFiles)) {
-                event(new FilesAddedEvent($addedFiles + $outdatedFiles));
-            }
-
-            $this->info("==================================================================================================================");
+            $this->warn("==================================================================================================================");
 
             $addedCount = count($addedFiles);
             $this->info("{$addedCount} files were added");
@@ -78,10 +74,19 @@ class SyncFiles extends Command
             $this->info("{$existingCount} files were existing");
 
             $outdatedCount = count($outdatedFiles);
-            $this->info("{$outdatedCount} files were outdated, updated.");
+            $this->info("{$outdatedCount} files were outdated.");
 
             $removedCount = count($removedFiles);
             $this->info("{$removedCount} files were removed");
+
+            $this->warn("==================================================================================================================");
+
+            if (! empty($addedFiles) || ! empty($outdatedFiles)) {
+                $this->info("File changes detected, scanning new and updates files and updating the library. Watch the log file for details.");
+                event(new FilesAddedEvent($addedFiles + $outdatedFiles));
+            } else {
+                $this->info("No file changes detected. Only file links have been updated.");
+            }
         }
 
         $this->cleanDuplicateMedia();
