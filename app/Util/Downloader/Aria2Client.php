@@ -2,6 +2,8 @@
 
 namespace App\Util\Downloader;
 
+use Log;
+
 class Aria2Client
 {
     protected $jsonRpcClient;
@@ -16,7 +18,7 @@ class Aria2Client
         'split'                     => '6',
     ];
 
-    protected $premUrlPattern = '/(https:\/\/[a-zA-Z]{1,20})(-)(sng1|fra1|nyc1|sfo1|tor1|sto)(.*)/';
+    protected $premUrlPattern = '/(https:\/\/[a-zA-Z]{1,40})(-)(sng1|fra1|nyc1|sfo1|tor1|sto)(.*)/';
     protected $premCdnLocations = ['sng1', 'fra1', 'nyc1', 'sfo1', 'tor1', 'sto'];
 
     /**
@@ -28,6 +30,14 @@ class Aria2Client
         $this->token = env('DOWNLOADS_ARIA2_TOKEN');
     }
 
+    /**
+     * Trim aria2 jsonrpc response to internal response.
+     *
+     * @param array    $responses
+     * @param callable $key
+     *
+     * @return array
+     */
     private function transformResponses($responses, callable $key = null)
     {
         $result = [];
@@ -40,8 +50,11 @@ class Aria2Client
                 } else {
                     $result[$key($i)] = $response->result;
                 }
+            } else {
+                Log::error("Aria2 RPC download request response didn't have result, probably an error", [$response]);
             }
         }
+
         return $result;
     }
 
@@ -59,7 +72,7 @@ class Aria2Client
     {
         $requests = [];
         foreach ($files as $file) {
-            $uris = $this->multiplyUrl($file['url']);
+            $uris = $this->verifyAndMultiplyUrl($file['url']);
             $requests[] = $this->jsonRpcClient->request(1, 'aria2.addUri', [
                 "token:{$this->token}", $uris,
                 [
@@ -123,16 +136,20 @@ class Aria2Client
      *
      * @return array|string
      */
-    private function multiplyUrl($url)
+    private function verifyAndMultiplyUrl($url)
     {
-        preg_match($this->premUrlPattern, $url, $matches);
-        if (! empty($matches)) {
-            $urls = [];
-            foreach ($this->premCdnLocations as $location) {
-                $urls[] = preg_replace($this->premUrlPattern, "$1$2$location$4", $url);
+        if (is_string($url)) {
+            preg_match($this->premUrlPattern, $url, $matches);
+            if (! empty($matches)) {
+                $urls = [];
+                foreach ($this->premCdnLocations as $location) {
+                    $urls[] = preg_replace($this->premUrlPattern, "$1$2$location$4", $url);
+                }
+                return $urls;
             }
-            return $urls;
+            return [$url];
+        } else {
+            return $url;
         }
-        return $url;
     }
 }
