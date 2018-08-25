@@ -19,7 +19,7 @@ class Aria2Client
     ];
 
     protected $premUrlPattern = '/(https:\/\/[a-zA-Z]{1,40})(-)(sng1|fra1|nyc1|sfo1|tor1|sto)(.*)/';
-    protected $premCdnLocations = ['sng1', 'fra1', 'nyc1', 'sfo1', 'tor1', 'sto'];
+    protected $premCdnLocations = ['sto', 'fra1', 'nyc1', 'sfo1', 'tor1', 'sng1'];
 
     /**
      * Aria2Client constructor.
