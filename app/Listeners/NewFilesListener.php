@@ -114,11 +114,22 @@ class NewFilesListener
                 Show::insert($show);
 
                 foreach ($showResult['seasons'] as $seasonResult) {
-                    $season = Season::build($seasonResult, $showResult);
-                    Season::insert($season);
+                    if (! Season::exists($seasonResult)) {
+                        $season = Season::build($seasonResult, $showResult);
+                        Season::insert($season);
+                    }
                 }
             } else {
-                Log::info('Show already exists in database, continuing.', [$firstShowResult['name']]);
+                Log::info('Show already exists in database, checking season.', [$firstShowResult['name']]);
+
+                $season = $guessed->season;
+                $seasonResult = $this->tmdbClient->getTvSeasonApi()->getSeason($firstShowResult['id'], $season);
+                if (! Season::exists($seasonResult)) {
+                    $season = Season::build($seasonResult, $firstShowResult);
+                    Season::insert($season);
+                } else {
+                    Log::info("Season $season already exists in database, continuing", [$seasonResult['name']]);
+                }
             }
 
             $seasonResult = $this->getSeasonFromCache($firstShowResult, $guessed);
@@ -129,7 +140,7 @@ class NewFilesListener
 
             $episodeResult = $this->getEpisode($seasonResult, $guessed);
             if ($episodeResult != null) {
-                $episode = Episode::build($episodeResult, $seasonResult, $premFile);
+                $episode = Episode::build($episodeResult, $seasonResult, $firstShowResult, $premFile);
                 $episode->safeSave();
                 Log::info("Successfully added an episode to the database", [$episode]);
             } else {

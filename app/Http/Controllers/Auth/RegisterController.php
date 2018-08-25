@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Model\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -37,6 +37,10 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        if (! config('luntiq.users.registration')) {
+            abort(403);
+        }
+
         $this->middleware('guest');
     }
 

@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright (c) 2017  Alashov Berkeli
- * It is licensed under GNU GPL v. 2 or later. For full terms see the file LICENSE.
- */
 
 namespace App\Util;
 
@@ -20,11 +16,10 @@ class PremClient
     private $httpClient;
 
     /**
-     * HttpClientTrait constructor.
+     * PremClient constructor.
      */
     public function __construct()
     {
-
         $handler = HandlerStack::create();
         $handler->push(Middleware::mapRequest(function (RequestInterface $request) {
             $request = $request->withUri(Uri::withQueryValue($request->getUri(), 'customer_id', config('services.prem.id')));

@@ -3,17 +3,17 @@
 namespace App\Model;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Util\Downloader\DownloadableInterface;
 
-class Movie extends Model
+class Movie extends Model implements DownloadableInterface
 {
     protected $table = 'movies';
 
     /**
      * @param array     $movieResult movie object from search result
-     * @param PremFile  $premFile prem file
-     * @param \stdClass $guessed guessed instance
+     * @param PremFile  $premFile    prem file
+     * @param \stdClass $guessed     guessed instance
      *
      * @return Movie movie model instance created from given movie result and prem file
      */
@@ -31,6 +31,7 @@ class Movie extends Model
         $movie->poster_path = $movieResult['poster_path'];
         $movie->backdrop_path = $movieResult['backdrop_path'];
         $movie->release_date = Carbon::parse($movieResult['release_date']);
+        $movie->download = config('luntiq.downloads.enable_for_new_media');
 
         if (isset($guessed->screen_size)) {
             $movie->quality = $guessed->screen_size;
@@ -47,5 +48,41 @@ class Movie extends Model
     public function file()
     {
         return $this->belongsTo(PremFile::class, 'prem_id', 'prem_id');
+    }
+
+    /**
+     * @return PremFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function buildFolderPath()
+    {
+        return sprintf('%s', config('luntiq.downloads.folders.movies'));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function buildFileName()
+    {
+        $title = $this->title;
+        $year = substr($this->release_date, 0, 4);
+        $fileExtension = pathinfo($this->file->name)['extension'];
+
+        return sprintf('%s (%s).%s', $title, $year, $fileExtension);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function buildFullPath()
+    {
+        return sprintf('%s/%s', $this->buildFolderPath(), $this->buildFileName());
     }
 }

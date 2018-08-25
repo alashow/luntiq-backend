@@ -9,21 +9,21 @@ use App\Model\PremFile;
 use App\Util\PremClient;
 use Illuminate\Console\Command;
 
-class SyncFiles extends Command
+class SyncLibrary extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'sync';
+    protected $signature = 'sync:library';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Syncs files from Premiumize';
+    protected $description = 'Scans and builds library from files in Premiumize Cloud';
 
     protected $preClient;
 
@@ -47,6 +47,7 @@ class SyncFiles extends Command
      */
     public function handle()
     {
+        $syncDownloads = false;
         $this->scanFolder();
 
         if (! empty($this->scannedFiles)) {
@@ -84,22 +85,26 @@ class SyncFiles extends Command
             if (! empty($addedFiles) || ! empty($outdatedFiles)) {
                 $this->info("File changes detected, scanning new and updates files and updating the library. Watch the log file for details.");
                 event(new FilesAddedEvent($addedFiles + $outdatedFiles));
+                $syncDownloads = true;
             } else {
                 $this->info("No file changes detected. Only file links have been updated.");
             }
         }
 
         $this->cleanDuplicateMedia();
+
+        if ($syncDownloads) {
+            $this->call('sync:downloads');
+        }
+
         return 0;
     }
 
     /**
-     * Scan's folder recursively for files.
+     * Scans folder recursively for files.
      *
      * @param string|null    $folderId
      * @param \stdClass|null $folder
-     *
-     * @return int
      */
     private function scanFolder(string $folderId = null, \stdClass $folder = null)
     {
@@ -133,7 +138,7 @@ class SyncFiles extends Command
     }
 
     /**
-     * Scan's the file. If it's media, adds to scanned to files.
+     * Scans the file. If it's media, adds to scanned to files.
      *
      * @param \stdClass   $file
      * @param string|null $folderId

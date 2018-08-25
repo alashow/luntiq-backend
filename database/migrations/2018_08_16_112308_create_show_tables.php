@@ -56,6 +56,7 @@ class CreateShowTables extends BaseMigration
             $table->increments('id');
             $table->string('prem_id');
             $table->integer('tmdb_id');
+            $table->integer('show_id');
             $table->integer('season_id');
             $table->integer('season_number');
             $table->integer('episode_number');

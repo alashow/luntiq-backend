@@ -50,10 +50,38 @@ class PremFile extends Model
      *
      * @param Builder $builder
      * @param array   $ids
+     *
+     * @return Builder
      */
-    public function scopeIds(Builder $builder, $ids)
+    public function scopeIds(Builder $builder, array $ids)
     {
-        $builder->whereIn('prem_id', $ids);
+        return $builder->whereIn('prem_id', $ids);
+    }
+
+    /**
+     * Scope to given file id only.
+     *
+     * @param Builder $builder
+     * @param string  $id
+     *
+     * @return Builder
+     */
+    public function scopeId(Builder $builder, string $id)
+    {
+        return $this->scopeIds($builder, [$id]);
+    }
+
+    /**
+     * Scope to given download id only.
+     *
+     * @param Builder $builder
+     * @param string  $downloadId
+     *
+     * @return Builder
+     */
+    public function scopeDownloadId(Builder $builder, string $downloadId)
+    {
+        return $builder->where('download_id', '=', $downloadId);
     }
 
     /**

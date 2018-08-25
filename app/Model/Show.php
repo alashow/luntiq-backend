@@ -13,20 +13,6 @@ class Show extends Model
     protected $guarded = ['id'];
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('withSeasons', function (Builder $builder) {
-            $builder->has('seasons', '>=', 1);
-        });
-    }
-
-    /**
      * @param array $showResult show object from search result
      *
      * @return array show model fields from given show result
@@ -50,6 +36,7 @@ class Show extends Model
         $show['backdrop_path'] = $showResult['backdrop_path'];
         $show['first_air_date'] = Carbon::parse($showResult['first_air_date']);
         $show['last_air_date'] = Carbon::parse($showResult['last_air_date']);
+        $show['download'] = config('luntiq.downloads.enable_for_new_media');
 
         return $show;
     }
@@ -57,7 +44,7 @@ class Show extends Model
     /**
      * Check if a show already exists in database.
      *
-     * @param $showResult
+     * @param array $showResult
      *
      * @return bool
      */
@@ -74,5 +61,25 @@ class Show extends Model
     public function seasons()
     {
         return $this->hasMany(Season::class, 'show_id', 'tmdb_id');
+    }
+
+    /**
+     * Queries linked episodes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function episodes()
+    {
+        return $this->hasMany(Episode::class, 'show_id', 'tmdb_id');
+    }
+
+    /**
+     * Scope shows that have at least one season.
+     *
+     * @param Builder $builder
+     */
+    public function scopeHasSeasons(Builder $builder)
+    {
+        $builder->has('seasons', '>=', 1);
     }
 }

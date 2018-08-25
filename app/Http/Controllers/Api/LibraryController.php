@@ -15,8 +15,15 @@ class LibraryController extends BaseApiController
      */
     public function index()
     {
-        $movies = Movie::with('file')->get();
-        $shows = Show::with('seasons.episodes.file')->get();
+        $movies = Movie::with('file')->latest()->get();
+
+        $withSeasonsAndEpisodes = [
+            'seasons' => function ($query) {
+                $query->hasEpisodes();
+            },
+            'seasons.episodes.file',
+        ];
+        $shows = Show::hasSeasons()->with($withSeasonsAndEpisodes)->latest()->get();
 
         return $this->ok([
             'movies' => $movies,

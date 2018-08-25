@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\DownloadableCheckChangedEvent;
 use App\Events\FilesAddedEvent;
+use App\Listeners\DownloadableCheckChangeListener;
 use App\Listeners\NewFilesListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -15,6 +17,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         FilesAddedEvent::class => [NewFilesListener::class],
+
+        DownloadableCheckChangedEvent::class => [DownloadableCheckChangeListener::class],
     ];
 
     /**

@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Util;
+
+use App\Util\Downloader\Aria2Client;
+use App\Util\Downloader\DownloadableInterface;
+
+class DownloadManager
+{
+    protected $aria2Client;
+
+    /**
+     * DownloadManager constructor.
+     */
+    public function __construct()
+    {
+        $this->aria2Client = new Aria2Client();
+    }
+
+    /**
+     * @param DownloadableInterface[] $items
+     *
+     * @return array ids
+     */
+    private function getIds($items)
+    {
+        $ids = [];
+        foreach ($items as $item) {
+            $ids[] = $item->getFile()->download_id;
+        }
+        return $ids;
+    }
+
+    /**
+     * @param DownloadableInterface[] $items
+     *
+     * @return array
+     */
+    public function start($items)
+    {
+        $files = [];
+        foreach ($items as $item) {
+            $files[] = [
+                'key'    => $item->getFile()->prem_id,
+                'folder' => $item->buildFolderPath(),
+                'name'   => $item->buildFileName(),
+                'url'    => $item->getFile()->link,
+            ];
+        }
+
+        return $this->aria2Client->download($files);
+    }
+
+    /**
+     * @param DownloadableInterface[] $items
+     *
+     * @return array
+     */
+    public function check($items)
+    {
+        return $this->aria2Client->checkStatus($this->getIds($items));
+    }
+
+    /**
+     * @param DownloadableInterface[] $items
+     *
+     * @return array
+     */
+    public function cancel($items)
+    {
+        return $this->aria2Client->cancel($this->getIds($items));
+    }
+}
