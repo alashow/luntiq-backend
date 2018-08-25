@@ -133,7 +133,8 @@ class SyncDownloads extends Command
 
     private function cleanUpFailed()
     {
-        $items = $this->movies->merge($this->episodes)->filter(function ($item) {
+        $items = $this->checkedMovies + $this->uncheckedMovies + $this->checkedEpisodes + $this->uncheckedEpisodes;
+        $items = array_filter($items, function ($item) {
             return $item->file->download_id != null;
         });
 
