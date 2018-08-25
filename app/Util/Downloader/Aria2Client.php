@@ -70,6 +70,8 @@ class Aria2Client
     {
         $requests = [];
         foreach ($files as $file) {
+            Log::info('Adding file to download queue', $file);
+
             $uris = $this->verifyAndMultiplyUrl($file['url']);
             $requests[] = $this->jsonRpcClient->request(1, 'aria2.addUri', [
                 "token:{$this->token}", $uris,
