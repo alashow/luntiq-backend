@@ -2,9 +2,6 @@
 
 namespace App\Util\Downloader;
 
-
-use Closure;
-
 class Aria2Client
 {
     protected $jsonRpcClient;
@@ -15,6 +12,7 @@ class Aria2Client
         'allow-overwrite'           => 'true',
         'auto-file-renaming'        => 'false',
         'max-connection-per-server' => '4',
+        'file-allocation'           => 'none',
     ];
 
     /**
