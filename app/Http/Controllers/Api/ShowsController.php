@@ -19,6 +19,21 @@ class ShowsController extends BaseApiController
         ]);
     }
 
+    public function clearAll()
+    {
+        Show::where('download', '=', true)->update([
+            'download' => false,
+        ]);
+
+        Episode::where('download', '!=', null)->update([
+            'download' => null,
+        ]);
+
+        event(new DownloadableCheckChangedEvent());
+
+        return $this->ok();
+    }
+
     public function show($id)
     {
         $show = Show::with('seasons.episodes')->find($id);

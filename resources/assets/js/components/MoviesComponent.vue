@@ -1,14 +1,14 @@
 <template>
     <div class="py-4">
         <b-button size="medium" variant="primary" class="mb-4"
-                  :disable="loading"
+                  :disabled="loading"
                   @click="load">
             <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
             {{ $t('refresh') }}
         </b-button>
 
         <b-button size="medium" variant="primary" class="mb-4"
-                  :disable="loading"
+                  :disabled="loading"
                   @click="toggleAll">
             {{ toggleAllValue ? $t('movie.enableAll') : $t('movie.disableAll') }}
         </b-button>

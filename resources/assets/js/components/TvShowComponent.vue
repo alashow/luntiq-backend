@@ -10,14 +10,14 @@
 
         <div class="clearfix">
             <b-btn size="medium" variant="primary"
-                   :disable="loading"
+                   :disabled="loading"
                    @click="refresh">
                 <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
                 {{ $t('refresh') }}
             </b-btn>
 
             <b-btn size="medium" variant="primary"
-                   :disable="loading"
+                   :disabled="loading"
                    @click="toggleDownload(true)">
                 {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
             </b-btn>
@@ -91,6 +91,11 @@
                         sortable: true
                     }
                 ],
+            }
+        },
+        watch: {
+            tvshow: function () {
+                this.show = this.tvshow;
             }
         },
         methods: {

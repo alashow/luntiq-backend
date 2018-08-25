@@ -17,6 +17,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::group(['prefix' => 'shows'], function () {
             Route::get('', 'Api\ShowsController@shows')->name('shows');
+            Route::get('clearAll', 'Api\ShowsController@clearAll')->name('shows.clearAll');
+
             Route::get('{show}', 'Api\ShowsController@show')->name('show');
             Route::patch('{show}', 'Api\ShowsController@update')->name('show.update');
             Route::post('{show}/toggleDownload', 'Api\ShowsController@toggleDownload')->name('show.toggleDownload');
@@ -25,7 +27,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::group(['prefix' => 'episodes'], function () {
             Route::patch('{episode}', 'Api\EpisodesController@update')->name('episode.update');
         });
-
     });
 
     Route::get('sync', function () {

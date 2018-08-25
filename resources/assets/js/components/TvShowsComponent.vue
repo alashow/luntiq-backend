@@ -1,5 +1,21 @@
 <template>
     <div>
+        <div class="pt-4">
+            <b-btn size="medium" variant="primary"
+                   :disabled="loading"
+                   @click="load">
+                <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
+                {{ $t('shows.refresh') }}
+            </b-btn>
+
+            <b-btn size="medium" variant="primary"
+                   :disabled="loading"
+                   @click="clearAll">
+                <span class="fa fa-trash-alt"/>
+                {{ $t('shows.clearAll') }}
+            </b-btn>
+        </div>
+
         <tvshow-component v-for="show in shows"
                           :key="show.id"
                           :tvshow="show">
@@ -27,8 +43,14 @@
                         this.shows = response.data.data.shows;
                     }.bind(this))
                     .catch(function (error) {
-                        console.log(error);
-                    });
+                        this.loading = false;
+                    }.bind(this));
+            },
+            clearAll() {
+                axios.get(route('shows.clearAll'))
+                    .then(function (response) {
+                        this.load();
+                    }.bind(this));
             }
         }
     }

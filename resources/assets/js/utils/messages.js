@@ -1,7 +1,7 @@
 export default {
     en: {
         'movies': 'Movies',
-        'tvShows': 'Tv Shows',
+        'tvShows': 'TV Shows',
         'refresh': 'Refresh',
 
         'movie': {
@@ -10,6 +10,11 @@ export default {
             'empty': 'No movies found :(',
             'disableAll': 'Disable All',
             'enableAll': 'Enable All',
+        },
+
+        'shows': {
+            'refresh': 'Refresh TV Shows',
+            'clearAll': 'Clear All TV Shows',
         },
 
         'show': {
