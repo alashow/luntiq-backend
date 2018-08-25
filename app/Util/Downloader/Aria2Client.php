@@ -12,8 +12,9 @@ class Aria2Client
     protected $token;
 
     protected $defaultParams = [
-        'allow-overwrite' => 'true',
-        'auto-file-renaming'  => 'false',
+        'allow-overwrite'           => 'true',
+        'auto-file-renaming'        => 'false',
+        'max-connection-per-server' => '4',
     ];
 
     /**
