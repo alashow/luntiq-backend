@@ -83,9 +83,11 @@ class SyncDownloads extends Command
     private function startChecked()
     {
         $items = $this->checkedMovies + $this->checkedEpisodes;
+
         $newItems = array_filter($items, function ($item) {
             return $item->file->download_id == null;
         });
+        $newItemsCount = count($newItems);
 
         $statefulItems = array_diff($items, $newItems);
         $statefulItemsCount = count($statefulItems);
@@ -104,7 +106,9 @@ class SyncDownloads extends Command
         }
 
         $this->info("Started downloading {$startedCount} items. {$statefulItemsCount} items were already downloading or finished.");
-
+        if ($newItemsCount != $startedCount) {
+            $this->warn("New items count and started count doesn't match. It's probably because downloader can't handle more items to queue up.");
+        }
     }
 
     private function disposeUnchecked()
