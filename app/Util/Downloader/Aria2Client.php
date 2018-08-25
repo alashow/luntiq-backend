@@ -50,8 +50,6 @@ class Aria2Client
                 } else {
                     $result[$key($i)] = $response->result;
                 }
-            } else {
-                Log::error("Aria2 RPC download request response didn't have result, probably an error", [$response]);
             }
         }
 
