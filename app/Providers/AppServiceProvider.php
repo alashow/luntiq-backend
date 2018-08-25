@@ -20,7 +20,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton('TmdbClient', function ($app) {
             $tmdbToken = new \Tmdb\ApiToken(config('services.tmdb.api_key'));
-            return new \Tmdb\Client($tmdbToken);
+            return new \Tmdb\Client($tmdbToken, [
+                'cache' => [
+                    'path' => config('luntiq.tmdb.cache'),
+                ],
+            ]);
         });
     }
 }

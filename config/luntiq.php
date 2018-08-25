@@ -21,6 +21,10 @@ return [
         ],
     ],
 
+    'tmdb'  => [
+        'cache' => storage_path('app/cache/tmdb-api'),
+    ],
+
     'downloads' => [
         'enable_for_new_media' => env('DOWNLOADS_ENABLE_FOR_NEW_MEDIA', false),
 
