@@ -50,6 +50,11 @@ class NewFilesListener
             $guessed = $premFile->guessIt();
             Log::info('Guessed a file', [$guessed]);
 
+            if ($guessed == null) {
+                Log::warning("Couldn't guess the file", [$premFile]);
+                continue;
+            }
+
             switch ($guessed->type) {
                 case 'movie':
                     $this->handleMovie($premFile, $guessed);
