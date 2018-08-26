@@ -39,5 +39,10 @@ return [
             'movies' => sprintf('%s/movies', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),
             'shows'  => sprintf('%s/shows', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),
         ],
+
+        'aria2' => [
+            'host'  => env('DOWNLOADS_ARIA2_HOST', 'http://localhost:6800'),
+            'token' => env('DOWNLOADS_ARIA2_TOKEN'),
+        ],
     ],
 ];

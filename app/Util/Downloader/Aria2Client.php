@@ -26,8 +26,8 @@ class Aria2Client
      */
     public function __construct()
     {
-        $this->jsonRpcClient = \Graze\GuzzleHttp\JsonRpc\Client::factory(sprintf('%s/jsonrpc', env('DOWNLOADS_ARIA2_HOST')));
-        $this->token = env('DOWNLOADS_ARIA2_TOKEN');
+        $this->jsonRpcClient = \Graze\GuzzleHttp\JsonRpc\Client::factory(sprintf('%s/jsonrpc', config('luntiq.downloads.aria2.host')));
+        $this->token = config('luntiq.downloads.aria2.token');
     }
 
     /**
