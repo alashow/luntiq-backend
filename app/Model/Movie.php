@@ -2,12 +2,15 @@
 
 namespace App\Model;
 
+use App\Model\Traits\HasDownloadStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Util\Downloader\DownloadableInterface;
 
 class Movie extends Model implements DownloadableInterface
 {
+    use HasDownloadStatus;
+
     protected $table = 'movies';
 
     /**

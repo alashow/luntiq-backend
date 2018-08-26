@@ -13,7 +13,7 @@
             {{ toggleAllValue ? $t('movie.enableAll') : $t('movie.disableAll') }}
         </b-button>
 
-        <b-table striped hover
+        <b-table striped hover responsive
                  v-if="movies.length > 0"
                  :items="movies"
                  :fields="fields">
@@ -27,15 +27,17 @@
                 </media-popover-component>
             </template>
 
+            <template slot="status" slot-scope="data">
+                <status-popover-component :data="data.item.status"/>
+            </template>
+
             <template slot="download" slot-scope="data">
-                <b-form-checkbox v-model="data.item.download"
-                                 @change="toggleDownload($event, data.item.id)">
+                <b-form-checkbox v-model="data.item.download" @change="toggleDownload($event, data.item.id)">
                 </b-form-checkbox>
             </template>
         </b-table>
 
-        <b-alert show variant="danger"
-                 v-if="!loading && movies.length === 0">
+        <b-alert show variant="danger" v-if="!loading && movies.length === 0">
             {{ $t('movie.empty') }}
         </b-alert>
     </div>
@@ -53,6 +55,11 @@
                     {
                         key: 'title',
                         label: this.$i18n.t('movie.title'),
+                        sortable: true
+                    },
+                    {
+                        key: 'status',
+                        label: this.$i18n.t('status.title'),
                         sortable: true
                     },
                     {

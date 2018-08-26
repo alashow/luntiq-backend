@@ -18,9 +18,10 @@ class MovieResource extends JsonResource
         return [
             'id'          => $this->id,
             'title'       => $this->title,
-            'overview'       => $this->overview,
+            'overview'    => $this->overview,
             'poster_path' => $this->poster_path,
             'download'    => boolval($this->download),
+            'status'      => $this->getStatus(),
         ];
     }
 }

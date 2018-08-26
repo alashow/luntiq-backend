@@ -23,6 +23,7 @@ class EpisodeResource extends JsonResource
             'episode'     => $this->episode_number,
             'poster_path' => $this->poster_path,
             'download'    => boolval($this->download),
+            'status'      => $this->getStatus(),
         ];
     }
 }

@@ -3,11 +3,14 @@
 namespace App\Model;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Model\Traits\HasDownloadStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Episode extends Model
 {
+
+    use HasDownloadStatus;
+
     protected $table = 'episodes';
 
     /**

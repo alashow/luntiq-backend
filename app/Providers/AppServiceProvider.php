@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Util\DownloadManager;
 use Illuminate\Support\ServiceProvider;
 use App\Util\PremClient;
 
@@ -14,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('Downloader', function ($app) {
+            return new DownloadManager();
+        });
+
         $this->app->singleton('PremClient', function ($app) {
             return new PremClient();
         });

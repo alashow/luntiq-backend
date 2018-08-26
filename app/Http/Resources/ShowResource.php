@@ -21,7 +21,7 @@ class ShowResource extends JsonResource
             'overview'    => $this->overview,
             'poster_path' => $this->poster_path,
             'download'    => boolval($this->download),
-            'episodes'    => EpisodeResource::collection($this->seasons->pluck('episodes')->flatten()),
+            'episodes'    => EpisodeResource::collection($this->episodes),
         ];
     }
 }

@@ -12,7 +12,7 @@ class ShowsController extends BaseApiController
 {
     public function shows()
     {
-        $shows = Show::with('seasons.episodes')->latest()->get();
+        $shows = Show::with('episodes.file')->latest()->get();
 
         return $this->ok([
             'shows' => ShowResource::collection($shows),
@@ -36,7 +36,7 @@ class ShowsController extends BaseApiController
 
     public function show($id)
     {
-        $show = Show::with('seasons.episodes')->find($id);
+        $show = Show::with('episodes.file')->find($id);
 
         return $this->ok(['show' => ShowResource::make($show)]);
     }
@@ -50,11 +50,7 @@ class ShowsController extends BaseApiController
 
         $recursive = $request->input('recursive', false);
         if ($recursive) {
-            $episodeIds = $show->seasons()
-                ->with('episodes')->get()
-                ->pluck('episodes')
-                ->flatten()
-                ->pluck('id');
+            $episodeIds = $show->episodes->pluck('id');
             Episode::whereIn('id', $episodeIds)->where('download', '=', ! $enable)->update([
                 'download' => $enable,
             ]);

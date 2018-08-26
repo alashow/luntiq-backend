@@ -30,20 +30,27 @@ class SyncDownloads extends Command
      */
     protected $downloader;
 
-    protected $movies = [];
-    protected $episodes = [];
-    protected $checkedMovies = [];
-    protected $uncheckedMovies = [];
-    protected $checkedEpisodes = [];
-    protected $uncheckedEpisodes = [];
+    protected $movies;
+    protected $episodes;
+    protected $checkedMovies;
+    protected $uncheckedMovies;
+    protected $checkedEpisodes;
+    protected $uncheckedEpisodes;
 
     /**
      * SyncDownloads constructor.
+     *
+     * @param DownloadManager $downloader
      */
-    public function __construct()
+    public function __construct(DownloadManager $downloader)
     {
         parent::__construct();
-        $this->downloader = new DownloadManager();
+        $this->downloader = $downloader;
+
+        $this->checkedMovies = collect();
+        $this->uncheckedMovies = collect();
+        $this->checkedEpisodes = collect();
+        $this->uncheckedEpisodes = collect();
     }
 
     /**
@@ -60,14 +67,14 @@ class SyncDownloads extends Command
 
         $this->movies->each(function ($movie) {
             if ($movie->download) {
-                $this->checkedMovies[] = $movie;
-            } else $this->uncheckedMovies[] = $movie;
+                $this->checkedMovies->push($movie);
+            } else $this->uncheckedMovies->push($movie);
         });
 
         $this->episodes->each(function (Episode $episode) {
             if ($episode->downloadable()) {
-                $this->checkedEpisodes[] = $episode;
-            } else $this->uncheckedEpisodes[] = $episode;
+                $this->checkedEpisodes->push($episode);
+            } else $this->uncheckedEpisodes->push($episode);
         });
 
         try {
@@ -82,14 +89,14 @@ class SyncDownloads extends Command
 
     private function startChecked()
     {
-        $items = $this->checkedMovies + $this->checkedEpisodes;
+        $items = $this->checkedMovies->push($this->checkedEpisodes)->flatten();
 
-        $newItems = array_filter($items, function ($item) {
+        $newItems = $items->filter(function ($item) {
             return $item->file->download_id == null;
         });
         $newItemsCount = count($newItems);
 
-        $statefulItems = array_diff($items, $newItems);
+        $statefulItems = $items->diff($newItems);
         $statefulItemsCount = count($statefulItems);
 
         if (! empty($newItems)) {
@@ -113,7 +120,7 @@ class SyncDownloads extends Command
 
     private function disposeUnchecked()
     {
-        $items = $this->uncheckedMovies + $this->uncheckedEpisodes;
+        $items = $this->uncheckedMovies->push($this->uncheckedEpisodes)->flatten();
 
         if (! empty($items)) {
             $this->downloader->cancel($items);
@@ -137,8 +144,7 @@ class SyncDownloads extends Command
 
     private function cleanUpFailed()
     {
-        $items = $this->checkedMovies + $this->uncheckedMovies + $this->checkedEpisodes + $this->uncheckedEpisodes;
-        $items = array_filter($items, function ($item) {
+        $items = $this->movies->push($this->episodes)->flatten()->filter(function ($item) {
             return $item->file->download_id != null;
         });
 

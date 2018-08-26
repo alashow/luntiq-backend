@@ -1,14 +1,11 @@
 <?php
 
-use App\Util\ArtisanInBackground;
-
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::group(['prefix' => 'api'], function () {
-
         Route::group(['prefix' => 'movies'], function () {
             Route::get('', 'Api\MoviesController@movies')->name('movies');
             Route::patch('{movie}', 'Api\MoviesController@update')->name('movie.update');
@@ -27,13 +24,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::group(['prefix' => 'episodes'], function () {
             Route::patch('{episode}', 'Api\EpisodesController@update')->name('episode.update');
         });
+
+        Route::group(['prefix' => 'episodes'], function () {
+            Route::patch('{episode}', 'Api\EpisodesController@update')->name('episode.update');
+        });
+
+        Route::group(['prefix' => 'downloads'], function () {
+            Route::get('check/{id}', 'Api\DownloadsController@check')->name('downloads.check');
+        });
     });
 
-    Route::get('sync', function () {
-        Log::info('Started manual library sync from web.');
-        ArtisanInBackground::run('sync:library');
-        return redirect(route('home'));
-    })->name('sync');
+    Route::get('sync', 'HomeController@sync')->name('sync');
 
     Route::get('/', function () {
         return redirect(route('home'));

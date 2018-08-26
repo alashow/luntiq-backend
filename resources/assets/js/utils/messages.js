@@ -15,6 +15,7 @@ export default {
         'shows': {
             'refresh': 'Refresh TV Shows',
             'clearAll': 'Clear All TV Shows',
+            'empty': 'No shows found :(',
         },
 
         'show': {
@@ -30,6 +31,16 @@ export default {
             'season': 'Season',
             'episode': 'Episode',
             'download': 'Download',
+        },
+
+        'status': {
+            'title': 'Status',
+            'state': 'State',
+            'connections': 'Connections',
+            'total': 'Size',
+            'done': 'Done',
+            'speed': 'Speed',
+            'none': 'None',
         },
 
         'errors': {

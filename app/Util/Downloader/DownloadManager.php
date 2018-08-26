@@ -62,6 +62,16 @@ class DownloadManager
     }
 
     /**
+     * @param string|array $ids download ids
+     *
+     * @return array
+     */
+    public function checkById($ids)
+    {
+        return $this->aria2Client->checkStatus(is_string($ids) ? [$ids] : $ids);
+    }
+
+    /**
      * @param DownloadableInterface[] $items
      *
      * @return array

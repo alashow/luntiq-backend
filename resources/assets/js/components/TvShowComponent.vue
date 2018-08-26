@@ -8,35 +8,32 @@
             </media-component>
         </div>
 
-        <div class="clearfix">
-            <b-btn size="medium" variant="primary"
-                   :disabled="loading"
-                   @click="refresh">
-                <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
-                {{ $t('refresh') }}
-            </b-btn>
+        <b-button-toolbar>
+            <div class="my-1">
+                <b-btn variant="primary" :disabled="loading" @click="refresh">
+                    <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
+                    {{ $t('refresh') }}
+                </b-btn>
 
-            <b-btn size="medium" variant="primary"
-                   :disabled="loading"
-                   @click="toggleDownload(true)">
-                {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
-            </b-btn>
+                <b-btn size="medium" variant="primary" :disabled="loading" @click="toggleDownload(true)">
+                    {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
+                </b-btn>
 
-            <b-btn v-b-toggle="'episodes'+show.id"
-                   variant="success">
-                {{ $t('show.episodes') }}
-            </b-btn>
-
-            <b-form-checkbox
-                    class="float-right"
-                    v-model="show.download"
-                    @change="toggleDownload(false)">
-                {{ $t('show.download') }}
-            </b-form-checkbox>
-        </div>
+                <b-btn size="medium" variant="primary" :disabled="loading">
+                    <b-form-checkbox v-model="show.download" @change="toggleDownload(false)">
+                        {{ $t('show.download') }}
+                    </b-form-checkbox>
+                </b-btn>
+            </div>
+            <b-button-group class="ml-sm-1 my-1">
+                <b-btn v-b-toggle="'episodes'+show.id" size="medium" variant="success">
+                    {{ $t('show.episodes') }}
+                </b-btn>
+            </b-button-group>
+        </b-button-toolbar>
 
         <b-collapse :id="'episodes'+show.id">
-            <b-table striped hover
+            <b-table striped hover responsive
                      class="mt-4"
                      v-if="show"
                      :items="show.episodes"
@@ -51,9 +48,12 @@
                     </media-popover-component>
                 </template>
 
+                <template slot="status" slot-scope="data">
+                    <status-popover-component :data="data.item.status"/>
+                </template>
+
                 <template slot="download" slot-scope="data">
-                    <b-form-checkbox v-model="data.item.download"
-                                     @change="changeEpisode($event, data.item.id)">
+                    <b-form-checkbox v-model="data.item.download" @change="changeEpisode($event, data.item.id)">
                     </b-form-checkbox>
                 </template>
             </b-table>
@@ -83,6 +83,11 @@
                     {
                         key: 'episode',
                         label: this.$i18n.t('episode.episode'),
+                        sortable: true
+                    },
+                    {
+                        key: 'status',
+                        label: this.$i18n.t('status.title'),
                         sortable: true
                     },
                     {

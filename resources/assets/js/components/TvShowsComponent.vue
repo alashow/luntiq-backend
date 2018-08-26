@@ -20,6 +20,10 @@
                           :key="show.id"
                           :tvshow="show">
         </tvshow-component>
+
+        <b-alert show variant="danger" class="mt-4" v-if="!loading && shows.length === 0">
+            {{ $t('shows.empty') }}
+        </b-alert>
     </div>
 </template>
 
