@@ -6,12 +6,12 @@ trait HasDownloadStatus
 {
     public function getStatus()
     {
-        if ($this->file->download_id != null) {
-            $statuses = resolve('Downloader')->check([$this]);
-            if (! empty($statuses)) {
-                return $statuses[0];
-            }
-        }
+//        if ($this->file->download_id != null) {
+//            $statuses = resolve('Downloader')->check([$this]);
+//            if (! empty($statuses)) {
+//                return $statuses[0];
+//            }
+//        }
 
         return null;
     }
