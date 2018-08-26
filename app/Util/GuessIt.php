@@ -17,7 +17,8 @@ class GuessIt
      */
     public static function guess(PremFile $premFile)
     {
+        $command = escapeshellarg(config('luntiq.scanner.guessit.path'));
         $itemName = escapeshellarg($premFile->name);
-        return json_decode(shell_exec("guessit -j {$itemName}"));
+        return json_decode(shell_exec("$command -j {$itemName}"));
     }
 }

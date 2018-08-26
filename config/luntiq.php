@@ -1,8 +1,15 @@
 <?php
 
 return [
+
+    'scanner' => [
+        'guessit' => [
+            'path' => env('SCANNER_GUESSIT_PATH', '/usr/local/bin/guessit'),
+        ],
+    ],
+
     'users' => [
-        'registration' => env('REGISTRATION_OPEN', false),
+        'registration' => env('USERS_REGISTRATION_OPEN', false),
     ],
 
     'files' => [
@@ -21,7 +28,7 @@ return [
         ],
     ],
 
-    'tmdb'  => [
+    'tmdb' => [
         'cache' => storage_path('app/cache/tmdb-api'),
     ],
 
