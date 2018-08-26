@@ -55,16 +55,19 @@ class NewFilesListener
                 continue;
             }
 
+            $scanned = false;
             switch ($guessed->type) {
                 case 'movie':
-                    $this->handleMovie($premFile, $guessed);
+                    $scanned = $this->handleMovie($premFile, $guessed);
                     break;
                 case 'episode':
-                    $this->handleEpisode($premFile, $guessed);
+                    $scanned = $this->handleEpisode($premFile, $guessed);
                     break;
                 default:
                     Log::warning('Guessed files type was unknown', [$guessed, $premFile]);
             }
+
+            $premFile->setScanned($scanned);
         }
     }
 
@@ -73,6 +76,8 @@ class NewFilesListener
      *
      * @param PremFile  $premFile
      * @param \stdClass $guessed
+     *
+     * @return bool successfully scanned if true
      */
     private function handleMovie(PremFile $premFile, \stdClass $guessed)
     {
@@ -86,12 +91,15 @@ class NewFilesListener
             $movieResult = $results->first();
             $movie = Movie::build($movieResult, $premFile, $guessed);
             $movie->save();
+
             Log::info("Successfully added a movie to the database", [$movie]);
+            return true;
         } else {
             Log::warning('TMDB returned empty result for guessed movie file', [
                 $premFile, $guessed,
             ]);
         }
+        return false;
     }
 
     /**
@@ -99,12 +107,14 @@ class NewFilesListener
      *
      * @param PremFile  $premFile
      * @param \stdClass $guessed
+     *
+     * @return bool successfully scanned if true
      */
     private function handleEpisode(PremFile $premFile, \stdClass $guessed)
     {
         if (! isset($guessed->episode)) {
             Log::warning("Skipping an episode without an episode number. Probably a special episode or file name doesn't have episode number in it.");
-            return;
+            return false;
         }
 
         Log::info('Searching show for a file: '.$premFile->name);
@@ -113,6 +123,7 @@ class NewFilesListener
             $firstShowResult = $results->first();
             if (! Show::exists($firstShowResult)) {
                 Log::info("Building a show..", $firstShowResult);
+
                 $showResult = $this->tmdbClient->getTvApi()->getTvshow($firstShowResult['id']);
 
                 $show = Show::build($showResult);
@@ -147,7 +158,9 @@ class NewFilesListener
             if ($episodeResult != null) {
                 $episode = Episode::build($episodeResult, $seasonResult, $firstShowResult, $premFile);
                 $episode->safeSave();
+
                 Log::info("Successfully added an episode to the database", [$episode]);
+                return true;
             } else {
                 Log::warning("Couldn't find episode from TMDB season result", [
                     $premFile, $guessed,
@@ -158,6 +171,7 @@ class NewFilesListener
                 $premFile, $guessed,
             ]);
         }
+        return false;
     }
 
     /**

@@ -113,4 +113,16 @@ class PremFile extends Model
     {
         return $this->hasOne(Episode::class, 'prem_id', 'prem_id');
     }
+
+    /**
+     * Set scan flag.
+     *
+     * @param bool $scanned
+     */
+    public function setScanned(bool $scanned)
+    {
+        $this->scanned = $scanned;
+        $this->save();
+        if (! $scanned) $this->increment('scan_fails');
+    }
 }

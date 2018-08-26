@@ -28,6 +28,7 @@ class SyncLibrary extends Command
     protected $preClient;
 
     protected $scannedFiles = [];
+    protected $scanFailIgnoreAfter;
 
     /**
      * Create a new command instance.
@@ -38,6 +39,7 @@ class SyncLibrary extends Command
     {
         parent::__construct();
         $this->preClient = $preClient->getClient();
+        $this->scanFailIgnoreAfter = config('luntiq.scanner.ignore_after');
     }
 
     /**
@@ -47,11 +49,12 @@ class SyncLibrary extends Command
      */
     public function handle()
     {
-        $syncDownloads = false;
         $this->scanFolder();
 
         if (! empty($this->scannedFiles)) {
-            $syncedFileIds = PremFile::all(['prem_id'])->pluck('prem_id')->toArray();
+            $files = PremFile::all(['prem_id', 'scanned', 'scan_fails']);
+            $syncedFileIds = $files->pluck('prem_id')->toArray();
+
             $scannedFileIds = array_keys($this->scannedFiles);
             $addedFiles = array_diff($scannedFileIds, $syncedFileIds);
             $existingFiles = array_diff($scannedFileIds, $addedFiles);
@@ -65,6 +68,10 @@ class SyncLibrary extends Command
 
             // do something about existing files
             $outdatedFiles = $this->diffAndUpdateExisting($existingFiles);
+
+            $neglectedFiles = $files->filter(function ($file) {
+                return ! $file->scanned && $file->scan_fails <= $this->scanFailIgnoreAfter;
+            })->pluck('prem_id')->toArray();
 
             $this->warn("==================================================================================================================");
 
@@ -80,12 +87,15 @@ class SyncLibrary extends Command
             $removedCount = count($removedFiles);
             $this->info("{$removedCount} files were removed");
 
+            $neglectedCount = count($neglectedFiles);
+            $this->info("{$neglectedCount} files were neglected / not scanned previously.");
+
             $this->warn("==================================================================================================================");
 
-            if (! empty($addedFiles) || ! empty($outdatedFiles)) {
-                $this->info("File changes detected, scanning new and updates files and updating the library. Watch the log file for details.");
-                event(new FilesAddedEvent($addedFiles + $outdatedFiles));
-                $syncDownloads = true;
+            $changes = $addedCount + $outdatedCount + $neglectedCount;
+            if ($changes > 0) {
+                $this->info("File changes detected, scanning new, updates, neglected files. Then updating the library. Watch the log file for details.");
+                event(new FilesAddedEvent($addedFiles + $outdatedFiles + $neglectedFiles));
             } else {
                 $this->info("No file changes detected. Only file links have been updated.");
             }
@@ -93,9 +103,7 @@ class SyncLibrary extends Command
 
         $this->cleanDuplicateMedia();
 
-        if ($syncDownloads) {
-            $this->call('sync:downloads');
-        }
+        $this->call('sync:downloads');
 
         return 0;
     }

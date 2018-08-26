@@ -6,6 +6,8 @@ return [
         'guessit' => [
             'path' => env('SCANNER_GUESSIT_PATH', '/usr/local/bin/guessit'),
         ],
+
+        'ignore_after' => 3, // scan fails
     ],
 
     'users' => [
