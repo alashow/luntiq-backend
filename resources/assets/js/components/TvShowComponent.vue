@@ -49,7 +49,7 @@
                 </template>
 
                 <template slot="status" slot-scope="data">
-                    <status-popover-component :data="data.item.status"/>
+                    <status-popover-component :file="data.item.file.id"/>
                 </template>
 
                 <template slot="download" slot-scope="data">

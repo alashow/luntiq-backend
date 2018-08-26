@@ -21,7 +21,7 @@ class MovieResource extends JsonResource
             'overview'    => $this->overview,
             'poster_path' => $this->poster_path,
             'download'    => boolval($this->download),
-            'status'      => $this->getStatus(),
+            'file'        => PremFileResource::make($this->file),
         ];
     }
 }

@@ -27,15 +27,21 @@ class DownloadsController extends BaseApiController
         $this->downloader = $downloader;
     }
 
-    public function check($id)
+    public function check(PremFile $file)
     {
         $status = null;
-
-        $statuses = $this->downloader->checkById($id);
-        if (! empty($statuses)) {
-            $status = $statuses[0];
+        if ($file->movie()->exists()) {
+            $status = $file->movie->getStatus();
+        } else {
+            if ($file->episode()->exists()) {
+                $status = $file->episode->getStatus();
+            }
         }
 
-        return $this->ok(['status' => $status]);
+        if (! is_null($status)) {
+            return $this->ok(['status' => $status]);
+        } else {
+            return $this->error("File doesn't have linked movie or episode", 400);
+        }
     }
 }

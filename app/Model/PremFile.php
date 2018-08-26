@@ -93,4 +93,24 @@ class PremFile extends Model
     {
         return GuessIt::guess($this);
     }
+
+    /**
+     * Get linked movie.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function movie()
+    {
+        return $this->hasOne(Movie::class, 'prem_id', 'prem_id');
+    }
+
+    /**
+     * Get linked show episode.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function episode()
+    {
+        return $this->hasOne(Episode::class, 'prem_id', 'prem_id');
+    }
 }

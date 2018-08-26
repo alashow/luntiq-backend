@@ -40,7 +40,7 @@ export default {
             'total': 'Size',
             'done': 'Done',
             'speed': 'Speed',
-            'none': 'None',
+            'check': 'Check',
         },
 
         'errors': {

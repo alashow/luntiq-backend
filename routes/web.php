@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::group(['prefix' => 'downloads'], function () {
-            Route::get('check/{id}', 'Api\DownloadsController@check')->name('downloads.check');
+            Route::get('check/{file}', 'Api\DownloadsController@check')->name('downloads.check');
         });
     });
 
