@@ -3,7 +3,7 @@
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@home')->name('home');
 
     Route::group(['prefix' => 'api'], function () {
         Route::group(['prefix' => 'movies'], function () {
@@ -35,8 +35,5 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('sync', 'HomeController@sync')->name('sync');
-
-    Route::get('/', function () {
-        return redirect(route('home'));
-    });
+    Route::get('/', 'HomeController@index');
 });

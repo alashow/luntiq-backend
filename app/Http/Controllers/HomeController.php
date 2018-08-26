@@ -9,6 +9,11 @@ class HomeController extends Controller
 {
     public function index()
     {
+        return redirect(route('home'));
+    }
+
+    public function home()
+    {
         return view('home');
     }
 
