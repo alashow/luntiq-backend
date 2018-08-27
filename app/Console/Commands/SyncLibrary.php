@@ -6,6 +6,7 @@ use App\Events\FilesAddedEvent;
 use App\Model\Episode;
 use App\Model\Movie;
 use App\Model\PremFile;
+use App\Util\Downloader\DownloadableInterface;
 use App\Util\PremClient;
 use Illuminate\Console\Command;
 
@@ -61,6 +62,11 @@ class SyncLibrary extends Command
             $removedFiles = array_diff($syncedFileIds, $scannedFileIds);
 
             // delete removed files
+            collect_merge(Movie::byFile($removedFiles)->get(), Episode::byFile($removedFiles)->get())->each(function (DownloadableInterface $hasFile) {
+                $filePath = $hasFile->buildFullPath();
+                $this->warn("Removing removed file located at (if exists): $filePath");
+                @unlink($filePath);
+            });
             PremFile::ids($removedFiles)->delete();
 
             // add added files

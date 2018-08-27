@@ -89,7 +89,7 @@ class SyncDownloads extends Command
 
     private function startChecked()
     {
-        $items = $this->checkedMovies->push($this->checkedEpisodes)->flatten();
+        $items = collect_merge($this->checkedMovies, $this->checkedEpisodes);
 
         $newItems = $items->filter(function ($item) {
             return $item->file->download_id == null;
@@ -120,7 +120,7 @@ class SyncDownloads extends Command
 
     private function disposeUnchecked()
     {
-        $items = $this->uncheckedMovies->push($this->uncheckedEpisodes)->flatten();
+        $items = collect_merge($this->uncheckedMovies, $this->uncheckedEpisodes);
 
         if (! empty($items)) {
             $this->downloader->cancel($items);
@@ -144,7 +144,7 @@ class SyncDownloads extends Command
 
     private function cleanUpFailed()
     {
-        $items = $this->movies->push($this->episodes)->flatten()->filter(function ($item) {
+        $items = collect_merge($this->movies, $this->episodes)->filter(function ($item) {
             return $item->file->download_id != null;
         });
 

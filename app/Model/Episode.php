@@ -3,13 +3,13 @@
 namespace App\Model;
 
 use Carbon\Carbon;
-use App\Model\Traits\HasDownloadStatus;
+use App\Model\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
 
 class Episode extends Model
 {
 
-    use HasDownloadStatus;
+    use HasFile;
 
     protected $table = 'episodes';
 

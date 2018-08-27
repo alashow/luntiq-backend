@@ -2,7 +2,9 @@
 
 namespace App\Model\Traits;
 
-trait HasDownloadStatus
+use Illuminate\Database\Eloquent\Builder;
+
+trait HasFile
 {
     public function getStatus()
     {
@@ -35,5 +37,10 @@ trait HasDownloadStatus
         } else {
             return $checkFile();
         }
+    }
+
+    public function scopeByFile(Builder $builder, array $premIds)
+    {
+        $builder->with(['file'])->whereIn('prem_id', $premIds);
     }
 }
