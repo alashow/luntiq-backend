@@ -12,7 +12,7 @@ class ShowsController extends BaseApiController
 {
     public function shows()
     {
-        $shows = Show::with('episodes.file')->latest()->get();
+        $shows = Show::with('episodes.file')->hasEpisodes()->latest()->get();
 
         return $this->ok([
             'shows' => ShowResource::collection($shows),

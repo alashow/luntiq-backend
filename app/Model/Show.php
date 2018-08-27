@@ -82,4 +82,14 @@ class Show extends Model
     {
         $builder->has('seasons', '>=', 1);
     }
+
+    /**
+     * Scope shows that have at least one episode.
+     *
+     * @param Builder $builder
+     */
+    public function scopeHasEpisodes(Builder $builder)
+    {
+        $builder->has('episodes', '>=', 1);
+    }
 }
