@@ -23,7 +23,13 @@ export default {
             'download': 'Download',
             'disableAll': 'Disable All',
             'enableAll': 'Enable All',
+            'seasons': 'Seasons',
             'episodes': 'Episodes'
+        },
+
+        'season': {
+            'disableAll': 'Disable All',
+            'enableAll': 'Enable All',
         },
 
         'episode': {

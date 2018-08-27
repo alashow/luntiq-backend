@@ -12,7 +12,7 @@ class ShowsController extends BaseApiController
 {
     public function shows()
     {
-        $shows = Show::with('episodes.file')->hasEpisodes()->latest()->get();
+        $shows = Show::with('seasons.episodes.file')->hasSeasons()->latest()->get();
 
         return $this->ok([
             'shows' => ShowResource::collection($shows),
@@ -34,9 +34,9 @@ class ShowsController extends BaseApiController
         return $this->ok();
     }
 
-    public function show($id)
+    public function show($show)
     {
-        $show = Show::with('episodes.file')->find($id);
+        $show = Show::with('seasons.episodes.file')->find($show);
 
         return $this->ok(['show' => ShowResource::make($show)]);
     }
@@ -63,8 +63,9 @@ class ShowsController extends BaseApiController
         ]);
     }
 
-    public function update(Request $request, Show $show)
+    public function update(Request $request, $show)
     {
+        $show = Show::with('seasons.episodes.file')->find($show);
         $enable = $request->input('download', false);
 
         $show->download = $enable;

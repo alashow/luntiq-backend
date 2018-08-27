@@ -53,7 +53,7 @@ class Season extends Model
      */
     public function episodes()
     {
-        return $this->hasMany(Episode::class, 'season_id', 'tmdb_id');
+        return $this->hasMany(Episode::class, 'season_id', 'tmdb_id')->orderBy('episode_number', 'desc');
     }
 
     /**

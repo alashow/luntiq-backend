@@ -21,6 +21,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('{show}/toggleDownload', 'Api\ShowsController@toggleDownload')->name('show.toggleDownload');
         });
 
+        Route::group(['prefix' => 'seasons'], function () {
+            Route::get('{season}', 'Api\SeasonsController@season')->name('season');
+            Route::post('{season}/toggleDownload', 'Api\SeasonsController@toggleDownload')->name('season.toggleDownload');
+        });
+
         Route::group(['prefix' => 'episodes'], function () {
             Route::patch('{episode}', 'Api\EpisodesController@update')->name('episode.update');
         });

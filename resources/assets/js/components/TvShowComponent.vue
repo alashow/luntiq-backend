@@ -15,48 +15,68 @@
                     {{ $t('refresh') }}
                 </b-btn>
 
-                <b-btn size="medium" variant="primary" :disabled="loading" @click="toggleDownload(true)">
+                <b-btn variant="primary" :disabled="loading" @click="toggleDownload(true)">
                     {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
                 </b-btn>
 
-                <b-btn size="medium" variant="primary" :disabled="loading">
+                <b-btn variant="primary" :disabled="loading">
                     <b-form-checkbox v-model="show.download" @change="toggleDownload(false)">
                         {{ $t('show.download') }}
                     </b-form-checkbox>
                 </b-btn>
             </div>
             <b-button-group class="ml-sm-1 my-1">
-                <b-btn v-b-toggle="'episodes'+show.id" size="medium" variant="success">
-                    {{ $t('show.episodes') }}
+                <b-btn v-b-toggle="'seasons'+show.id" variant="success">
+                    {{ $t('show.seasons') }}
                 </b-btn>
             </b-button-group>
         </b-button-toolbar>
 
-        <b-collapse :id="'episodes'+show.id">
-            <b-table striped hover responsive
-                     class="mt-4"
-                     v-if="show"
-                     :items="show.episodes"
-                     :fields="fields">
-                <template slot="name" slot-scope="data">
-                    <media-popover-component
-                            prefix="episode"
-                            :id="data.item.id"
-                            :label="data.item.name"
-                            :overview="data.item.overview"
-                            :poster="data.item.poster_path || show.poster_path">
-                    </media-popover-component>
-                </template>
+        <b-collapse :id="'seasons'+show.id" v-if="show">
+            <b-list-group v-for="season in show.seasons" :key="season.id" class="mt-3">
+                <div>
+                    <b-list-group-item button v-b-toggle="'season'+season.id">
+                        {{ season.name }}
+                    </b-list-group-item>
+                    <b-collapse :id="'season'+season.id">
 
-                <template slot="status" slot-scope="data">
-                    <status-popover-component :file="data.item.file.id"/>
-                </template>
+                        <div class="py-3">
+                            <b-btn variant="primary" :disabled="season.loading" @click="refreshSeason(season.id)">
+                                <span class="fa fa-sync" v-bind:class="{ 'fa-spin': season.loading }"></span>
+                                {{ $t('refresh') }}
+                            </b-btn>
 
-                <template slot="download" slot-scope="data">
-                    <b-form-checkbox v-model="data.item.download" @change="changeEpisode($event, data.item.id)">
-                    </b-form-checkbox>
-                </template>
-            </b-table>
+                            <b-btn variant="primary" :disabled="season.loading" @click="toggleSeason(season.id)">
+                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll')
+                                }}
+                            </b-btn>
+                        </div>
+
+                        <b-table striped hover responsive
+                                 :items="season.episodes"
+                                 :fields="fields">
+                            <template slot="name" slot-scope="data">
+                                <media-popover-component
+                                        prefix="episode"
+                                        :id="data.item.id"
+                                        :label="data.item.name"
+                                        :overview="data.item.overview"
+                                        :poster="data.item.poster_path || show.poster_path">
+                                </media-popover-component>
+                            </template>
+
+                            <template slot="status" slot-scope="data">
+                                <status-popover-component :file="data.item.file.id"/>
+                            </template>
+
+                            <template slot="download" slot-scope="data">
+                                <b-form-checkbox v-model="data.item.download" :indeterminate.sync="data.item.download == null" @change="changeEpisode($event, data.item.id)">
+                                </b-form-checkbox>
+                            </template>
+                        </b-table>
+                    </b-collapse>
+                </div>
+            </b-list-group>
         </b-collapse>
     </div>
 </template>
@@ -73,11 +93,6 @@
                     {
                         key: 'name',
                         label: this.$i18n.t('episode.name'),
-                        sortable: true
-                    },
-                    {
-                        key: 'season',
-                        label: this.$i18n.t('episode.season'),
                         sortable: true
                     },
                     {
@@ -108,10 +123,9 @@
                 this.loading = true;
                 axios.get(route('show', {show: this.show.id}))
                     .then(function (response) {
-                        this.loading = false;
                         this.show = response.data.data.show;
                     }.bind(this))
-                    .catch(function (error) {
+                    .then(function () {
                         this.loading = false;
                     }.bind(this));
             },
@@ -131,8 +145,34 @@
                     }.bind(this));
             },
 
+            findSeason(seasonId) {
+                return this.show.seasons.find(season => season.id === seasonId)
+            },
+            refreshSeason(seasonId) {
+                let season = this.findSeason(seasonId);
+                season.loading = true;
+                axios.get(route('season', {season: seasonId}))
+                    .then(function (response) {
+                        Object.assign(season, response.data.data.season);
+                    }.bind(this))
+                    .then(function () {
+                        let season = this.findSeason(seasonId);
+                        season.loading = false;
+                    }.bind(this));
+            },
+            toggleSeason(seasonId) {
+                let season = this.findSeason(seasonId);
+                const params = {download: season.toggle};
+
+                axios.post(route('season.toggleDownload', {season: seasonId}), params)
+                    .then(function (response) {
+                        this.refreshSeason(seasonId);
+                        season.toggle = !response.data.data.enabled;
+                    }.bind(this));
+            },
+
             findEpisode(episodeId) {
-                return this.show.episodes.find(episode => episode.id === episodeId)
+                return this.show.seasons.map(o => o.episodes).find(episode => episode.id === episodeId)
             },
             updateEpisode(episodeId, params) {
                 let episode = this.findEpisode(episodeId);

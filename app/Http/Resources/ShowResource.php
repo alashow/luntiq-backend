@@ -17,11 +17,11 @@ class ShowResource extends JsonResource
     {
         return [
             'id'          => $this->id,
-            'name'       => $this->name,
+            'name'        => $this->name,
             'overview'    => $this->overview,
             'poster_path' => $this->poster_path,
             'download'    => boolval($this->download),
-            'episodes'    => EpisodeResource::collection($this->episodes),
+            'seasons'     => SeasonResource::collection($this->seasons),
         ];
     }
 }

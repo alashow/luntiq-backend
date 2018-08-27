@@ -5,6 +5,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Show extends Model
 {
@@ -60,7 +61,7 @@ class Show extends Model
      */
     public function seasons()
     {
-        return $this->hasMany(Season::class, 'show_id', 'tmdb_id');
+        return $this->hasMany(Season::class, 'show_id', 'tmdb_id')->hasEpisodes();
     }
 
     /**

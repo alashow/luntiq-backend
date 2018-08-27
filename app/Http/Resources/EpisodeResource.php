@@ -19,10 +19,9 @@ class EpisodeResource extends JsonResource
             'id'          => $this->id,
             'name'        => $this->name,
             'overview'    => $this->overview,
-            'season'      => $this->season_number,
             'episode'     => $this->episode_number,
             'poster_path' => $this->poster_path,
-            'download'    => boolval($this->download),
+            'download'    => is_null($this->download) ? null : boolval($this->download),
             'file'        => PremFileResource::make($this->file),
         ];
     }
