@@ -71,27 +71,6 @@ class Episode extends Model
     }
 
     /**
-     * Safely Save the episode.
-     * If no duplicates it just saves it. If there is duplicates, compares file sizes and chooses the one with largest file size (hoping it's the best quality).
-     *
-     * @return bool saved this one if true, otherwise didn't save and the other/existing one chosen.
-     */
-    public function safeSave()
-    {
-        $otherEpisode = Episode::with('file')->where('tmdb_id', '=', $this->tmdb_id)->first();
-        if ($otherEpisode == null) {
-            return $this->save();
-        } else {
-            if ($otherEpisode->file->size > $this->file->size) {
-                return false;
-            } else {
-                $otherEpisode->forceDelete();
-                return $this->save();
-            }
-        }
-    }
-
-    /**
      * Is this episode checked for downloading.
      *
      * @return bool

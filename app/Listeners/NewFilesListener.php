@@ -90,10 +90,10 @@ class NewFilesListener
         if ($results->isNotEmpty()) {
             $movieResult = $results->first();
             $movie = Movie::build($movieResult, $premFile, $guessed);
-            $movie->save();
+            $saved = $movie->safeSave();
 
-            Log::info("Successfully added a movie to the database", [$movie]);
-            return true;
+            if ($saved) Log::info("Successfully added a movie to the database", [$movie]);
+            return $saved;
         } else {
             Log::warning('TMDB returned empty result for guessed movie file', [
                 $premFile, $guessed,
@@ -157,10 +157,10 @@ class NewFilesListener
             $episodeResult = $this->getEpisode($seasonResult, $guessed);
             if ($episodeResult != null) {
                 $episode = Episode::build($episodeResult, $seasonResult, $firstShowResult, $premFile);
-                $episode->safeSave();
+                $saved = $episode->safeSave();
 
-                Log::info("Successfully added an episode to the database", [$episode]);
-                return true;
+                if ($saved) Log::info("Successfully added an episode to the database", [$episode]);
+                return $saved;
             } else {
                 Log::warning("Couldn't find episode from TMDB season result", [
                     $premFile, $guessed,
