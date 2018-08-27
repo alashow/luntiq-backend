@@ -58,7 +58,7 @@ class SyncDownloads extends Command
      */
     public function handle()
     {
-        if (! env('DOWNLOADS_ENABLED', false)) {
+        if (! config('luntiq.downloads.enabled')) {
             exit('Downloads is not enabled. Check ENV DOWNLOADS_ENABLED');
         }
 

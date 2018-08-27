@@ -35,6 +35,8 @@ return [
     ],
 
     'downloads' => [
+        'enabled' => env('DOWNLOADS_ENABLED', false),
+
         'enable_for_new_media' => env('DOWNLOADS_ENABLE_FOR_NEW_MEDIA', false),
 
         'folders' => [
