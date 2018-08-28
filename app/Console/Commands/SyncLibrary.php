@@ -180,23 +180,30 @@ class SyncLibrary extends Command
     {
         $equalityFields = ['name', 'folder_id', 'folder', 'size', 'link', 'stream_link'];
         $alwaysUpdatingFields = ['link', 'stream_link'];
-        $equal = function ($existingFile, $premFile) use ($equalityFields, $alwaysUpdatingFields) {
+        $equal = function ($existingFile, PremFile $premFile) use ($equalityFields, $alwaysUpdatingFields) {
             foreach ($equalityFields as $field) {
                 if ($existingFile[$field] != $premFile->{$field}) {
                     // update the field on synced file
                     $premFile->{$field} = $existingFile[$field];
+                    $isAlwaysUpdatingField = in_array($field, $alwaysUpdatingFields);
+                    // reset scanned flag if other fields changed. Probably the name changed, which affects how the media guessing depends on.
+                    if (! $isAlwaysUpdatingField) {
+                        $premFile->resetScanned();
+                    }
                     $premFile->save();
+
                     // hide that it's different if it's non-important field
-                    if (in_array($field, $alwaysUpdatingFields)) {
+                    if ($isAlwaysUpdatingField) {
                         continue;
                     } else {
-                        $this->warn("{$premFile->name} file's '{$field}' was updated.");
+                        $this->warn("{$premFile->name} file's '{$field}' was updated. Reset scanned flag for the file too.");
                         return false;
                     }
                 }
             }
             return true;
         };
+
         $existingFiles = array_only($this->scannedFiles, $existingFileIds);
         $syncedFiles = PremFile::ids($existingFileIds)->get();
 

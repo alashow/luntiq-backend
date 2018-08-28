@@ -125,4 +125,13 @@ class PremFile extends Model
         $this->save();
         if (! $scanned) $this->increment('scan_fails');
     }
+
+    /**
+     * Reset scanned flag.
+     */
+    public function resetScanned()
+    {
+        $this->scanned = false;
+        $this->scan_fails = 0;
+    }
 }
