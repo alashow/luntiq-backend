@@ -49,4 +49,6 @@ return [
             'token' => env('DOWNLOADS_ARIA2_TOKEN'),
         ],
     ],
+
+    'artisan_path' => env('ARTISAN_PATH', null),
 ];

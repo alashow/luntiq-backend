@@ -10,7 +10,7 @@ class ArtisanInBackground
 {
     public static function run($command)
     {
-        $artisanPath = env('ARTISAN_PATH', null);
+        $artisanPath = config('luntiq.artisan_path');
         if ($artisanPath != null && @file_exists(sprintf('%s/artisan', $artisanPath))) {
             $process = new Process("php artisan $command > /dev/null 2>&1 &", $artisanPath);
             $process->start();
