@@ -38,6 +38,10 @@ return [
         'enabled' => env('DOWNLOADS_ENABLED', false),
 
         'enable_for_new_media' => env('DOWNLOADS_ENABLE_FOR_NEW_MEDIA', false),
+        # mark new items for downloading
+
+        'clean_removed' => env('DOWNLOADS_CLEAN_REMOVED', false),
+        // clean downloaded files when it's removed in cloud
 
         'folders' => [
             'movies' => sprintf('%s/movies', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),

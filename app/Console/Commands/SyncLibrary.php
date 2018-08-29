@@ -62,11 +62,13 @@ class SyncLibrary extends Command
             $removedFiles = array_diff($syncedFileIds, $scannedFileIds);
 
             // delete removed files
-            collect_merge(Movie::byFile($removedFiles)->get(), Episode::byFile($removedFiles)->get())->each(function (DownloadableInterface $hasFile) {
-                $filePath = $hasFile->buildFullPath();
-                $this->warn("Removing removed file located at (if exists): $filePath");
-                @unlink($filePath);
-            });
+            if (config('luntiq.downloads.clean_removed')) {
+                collect_merge(Movie::byFile($removedFiles)->get(), Episode::byFile($removedFiles)->get())->each(function (DownloadableInterface $hasFile) {
+                    $filePath = $hasFile->buildFullPath();
+                    $this->warn("Removing removed file located at (if exists): $filePath");
+                    @unlink($filePath);
+                });
+            }
             PremFile::ids($removedFiles)->delete();
 
             // add added files
