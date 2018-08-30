@@ -5,8 +5,9 @@ namespace App\Model;
 use Carbon\Carbon;
 use App\Model\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
+use App\Util\Downloader\DownloadableInterface;
 
-class Episode extends Model
+class Episode extends Model implements DownloadableInterface
 {
 
     use HasFile;
