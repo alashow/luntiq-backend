@@ -52,61 +52,59 @@ class SyncLibrary extends Command
     {
         $this->scanFolder();
 
-        if (! empty($this->scannedFiles)) {
-            $files = PremFile::all(['prem_id', 'scanned', 'scan_fails']);
-            $syncedFileIds = $files->pluck('prem_id')->toArray();
+        $files = PremFile::all(['prem_id', 'scanned', 'scan_fails']);
+        $syncedFileIds = $files->pluck('prem_id')->toArray();
 
-            $scannedFileIds = array_keys($this->scannedFiles);
-            $addedFiles = array_diff($scannedFileIds, $syncedFileIds);
-            $existingFiles = array_diff($scannedFileIds, $addedFiles);
-            $removedFiles = array_diff($syncedFileIds, $scannedFileIds);
+        $scannedFileIds = array_keys($this->scannedFiles);
+        $addedFiles = array_diff($scannedFileIds, $syncedFileIds);
+        $existingFiles = array_diff($scannedFileIds, $addedFiles);
+        $removedFiles = array_diff($syncedFileIds, $scannedFileIds);
 
-            // delete removed files
-            if (config('luntiq.downloads.clean_removed')) {
-                collect_merge(Movie::byFile($removedFiles)->get(), Episode::byFile($removedFiles)->get())->each(function (DownloadableInterface $hasFile) {
-                    $filePath = $hasFile->buildFullPath();
-                    $this->warn("Removing removed file located at (if exists): $filePath");
-                    @unlink($filePath);
-                });
-            }
-            PremFile::ids($removedFiles)->delete();
+        // delete removed files
+        if (config('luntiq.downloads.clean_removed')) {
+            collect_merge(Movie::byFile($removedFiles)->get(), Episode::byFile($removedFiles)->get())->each(function (DownloadableInterface $hasFile) {
+                $filePath = $hasFile->buildFullPath();
+                $this->warn("Removing removed file located at (if exists): $filePath");
+                @unlink($filePath);
+            });
+        }
+        PremFile::ids($removedFiles)->delete();
 
-            // add added files
-            PremFile::insert(array_except($this->scannedFiles, $existingFiles));
+        // add added files
+        PremFile::insert(array_except($this->scannedFiles, $existingFiles));
 
-            // do something about existing files
-            $outdatedFiles = $this->diffAndUpdateExisting($existingFiles);
+        // do something about existing files
+        $outdatedFiles = $this->diffAndUpdateExisting($existingFiles);
 
-            $neglectedFiles = $files->filter(function ($file) {
-                return ! $file->scanned && $file->scan_fails <= $this->scanFailIgnoreAfter;
-            })->pluck('prem_id')->toArray();
+        $neglectedFiles = $files->filter(function ($file) {
+            return ! $file->scanned && $file->scan_fails <= $this->scanFailIgnoreAfter;
+        })->pluck('prem_id')->toArray();
 
-            $this->warn("==================================================================================================================");
+        $this->warn("==================================================================================================================");
 
-            $addedCount = count($addedFiles);
-            $this->info("{$addedCount} files were added");
+        $addedCount = count($addedFiles);
+        $this->info("{$addedCount} files were added");
 
-            $existingCount = count($existingFiles);
-            $this->info("{$existingCount} files were existing");
+        $existingCount = count($existingFiles);
+        $this->info("{$existingCount} files were existing");
 
-            $outdatedCount = count($outdatedFiles);
-            $this->info("{$outdatedCount} files were outdated.");
+        $outdatedCount = count($outdatedFiles);
+        $this->info("{$outdatedCount} files were outdated.");
 
-            $removedCount = count($removedFiles);
-            $this->info("{$removedCount} files were removed");
+        $removedCount = count($removedFiles);
+        $this->info("{$removedCount} files were removed");
 
-            $neglectedCount = count($neglectedFiles);
-            $this->info("{$neglectedCount} files were neglected / not scanned previously.");
+        $neglectedCount = count($neglectedFiles);
+        $this->info("{$neglectedCount} files were neglected / not scanned previously.");
 
-            $this->warn("==================================================================================================================");
+        $this->warn("==================================================================================================================");
 
-            $changes = $addedCount + $outdatedCount + $neglectedCount;
-            if ($changes > 0) {
-                $this->info("File changes detected, scanning new, updates, neglected files. Then updating the library. Watch the log file for details.");
-                event(new FilesAddedEvent($addedFiles + $outdatedFiles + $neglectedFiles));
-            } else {
-                $this->info("No file changes detected. Only file links have been updated.");
-            }
+        $changes = $addedCount + $outdatedCount + $neglectedCount;
+        if ($changes > 0) {
+            $this->info("File changes detected, scanning new, updates, neglected files. Then updating the library. Watch the log file for details.");
+            event(new FilesAddedEvent($addedFiles + $outdatedFiles + $neglectedFiles));
+        } else {
+            $this->info("No file changes detected. Only file links have been updated.");
         }
 
         $this->cleanDuplicateMedia();
