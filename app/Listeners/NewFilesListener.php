@@ -117,6 +117,11 @@ class NewFilesListener
             return false;
         }
 
+        // choose first episode number if it's two episode file
+        if (is_array($guessed->episode)) {
+            $guessed->episode = array_first($guessed->episode);
+        }
+
         Log::info('Searching show for a file: '.$premFile->name);
         $results = collect($this->tmdbClient->getSearchApi()->searchTv($guessed->title)['results']);
         if ($results->isNotEmpty()) {
