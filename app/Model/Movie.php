@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use App\Model\Traits\HasFile;
 use Carbon\Carbon;
+use App\Model\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
 use App\Util\Downloader\DownloadableInterface;
 

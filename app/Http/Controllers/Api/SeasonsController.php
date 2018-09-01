@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\DownloadableCheckChangedEvent;
-use App\Http\Resources\SeasonResource;
-use App\Model\Episode;
 use App\Model\Season;
-use App\Model\Show;
+use App\Model\Episode;
 use Illuminate\Http\Request;
-use App\Http\Resources\ShowResource;
+use App\Http\Resources\SeasonResource;
+use App\Events\DownloadableCheckChangedEvent;
 
 class SeasonsController extends BaseApiController
 {

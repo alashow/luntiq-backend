@@ -2,9 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\DownloadableCheckChangedEvent;
 use App\Util\ArtisanInBackground;
-use Symfony\Component\Process\Process;
+use App\Events\DownloadableCheckChangedEvent;
 
 class DownloadableCheckChangeListener
 {

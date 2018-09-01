@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Model\Movie;
 use App\Model\Show;
+use App\Model\Movie;
 use Illuminate\Http\JsonResponse;
 
 class LibraryController extends BaseApiController

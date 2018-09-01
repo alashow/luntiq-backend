@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Util\ArtisanInBackground;
 use Log;
+use App\Util\ArtisanInBackground;
 
 class HomeController extends Controller
 {

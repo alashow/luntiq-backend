@@ -2,8 +2,8 @@
 
 namespace App\Util;
 
-use Artisan;
 use Log;
+use Artisan;
 use Symfony\Component\Process\Process;
 
 class ArtisanInBackground

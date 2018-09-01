@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\DownloadableCheckChangedEvent;
-use App\Http\Resources\MovieResource;
 use App\Model\Movie;
 use Illuminate\Http\Request;
+use App\Http\Resources\MovieResource;
+use App\Events\DownloadableCheckChangedEvent;
 
 class MoviesController extends BaseApiController
 {

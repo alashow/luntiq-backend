@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Util\PremClient;
 use App\Util\DownloadManager;
 use Illuminate\Support\ServiceProvider;
-use App\Util\PremClient;
 
 class AppServiceProvider extends ServiceProvider
 {

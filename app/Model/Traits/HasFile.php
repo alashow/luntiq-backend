@@ -2,8 +2,8 @@
 
 namespace App\Model\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Log;
+use Illuminate\Database\Eloquent\Builder;
 
 trait HasFile
 {

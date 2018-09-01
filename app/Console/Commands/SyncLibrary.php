@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Events\FilesAddedEvent;
-use App\Model\Episode;
 use App\Model\Movie;
+use App\Model\Episode;
 use App\Model\PremFile;
-use App\Util\Downloader\DownloadableInterface;
 use App\Util\PremClient;
+use App\Events\FilesAddedEvent;
 use Illuminate\Console\Command;
+use App\Util\Downloader\DownloadableInterface;
 
 class SyncLibrary extends Command
 {

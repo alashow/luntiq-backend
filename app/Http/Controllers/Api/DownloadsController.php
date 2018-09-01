@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\DownloadableCheckChangedEvent;
-use App\Http\Resources\EpisodeResource;
-use App\Model\Episode;
 use App\Model\PremFile;
 use App\Util\DownloadManager;
-use Illuminate\Http\Request;
 
 class DownloadsController extends BaseApiController
 {

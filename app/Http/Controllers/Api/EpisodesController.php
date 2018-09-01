@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\DownloadableCheckChangedEvent;
-use App\Http\Resources\EpisodeResource;
 use App\Model\Episode;
 use Illuminate\Http\Request;
+use App\Http\Resources\EpisodeResource;
+use App\Events\DownloadableCheckChangedEvent;
 
 class EpisodesController extends BaseApiController
 {

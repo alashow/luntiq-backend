@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
-use App\Util\GuessIt;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Util\GuessIt;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class PremFile extends Model
 {

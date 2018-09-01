@@ -2,16 +2,15 @@
 
 namespace App\Listeners;
 
-use App\Events\FilesAddedEvent;
-use App\Model\Episode;
-use App\Model\Movie;
-use App\Model\PremFile;
-use App\Model\Season;
-use App\Model\Show;
-use App\Util\GuessIt;
-use Exception;
 use Log;
+use Exception;
 use Tmdb\Client;
+use App\Model\Show;
+use App\Model\Movie;
+use App\Model\Season;
+use App\Model\Episode;
+use App\Model\PremFile;
+use App\Events\FilesAddedEvent;
 
 class NewFilesListener
 {
