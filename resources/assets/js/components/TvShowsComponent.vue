@@ -14,6 +14,8 @@
                 <span class="fa fa-trash-alt"/>
                 {{ $t('shows.clearAll') }}
             </b-btn>
+
+            <shows-status-popover-component :all="true"></shows-status-popover-component>
         </div>
 
         <tvshow-component v-for="show in shows"
@@ -28,7 +30,10 @@
 </template>
 
 <script>
+    import ShowsStatusPopoverComponent from "./ShowsStatusPopoverComponent";
+
     export default {
+        components: {ShowsStatusPopoverComponent},
         data() {
             return {
                 loading: false,

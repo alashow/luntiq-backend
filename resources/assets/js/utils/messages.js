@@ -47,6 +47,22 @@ export default {
             'done': 'Done',
             'speed': 'Speed',
             'check': 'Check',
+            'shows': {
+                'check': 'Status',
+                'episode_count': 'Episode Count',
+                'scanned': 'Episode files scanned',
+                'dead': 'Files Dead',
+                'unchecked': 'Episodes Unchecked',
+                'complete': 'DL Complete',
+                'active': 'DL Active',
+                'waiting': 'DL Waiting',
+                'size': {
+                    'total': 'Total Size',
+                    'downloaded': 'Downloaded',
+                    'downloading': 'Downloading',
+                },
+                'autoRefresh': 'Auto refresh'
+            }
         },
 
         'errors': {

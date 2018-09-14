@@ -19,13 +19,20 @@
                 <li v-if="status.connections">
                     {{ $t('status.connections') }}: {{ status.connections }}
                 </li>
+
+                <li v-if="status.progress">
+                    <status-progress-component :status="status"></status-progress-component>
+                </li>
             </ul>
         </b-popover>
     </div>
 </template>
 
 <script>
+    import StatusProgressComponent from "./StatusProgressComponent";
+
     export default {
+        components: {StatusProgressComponent},
         props: ['file'],
         data() {
             return {

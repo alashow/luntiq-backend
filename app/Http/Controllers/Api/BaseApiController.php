@@ -32,6 +32,16 @@ class BaseApiController extends Controller
     }
 
     /**
+     * Not found response.
+     *
+     * @return JsonResponse
+     */
+    protected function notFound()
+    {
+        return $this->error('Not Found', 404);
+    }
+
+    /**
      * @param string $status
      * @param null   $data
      * @param null   $error

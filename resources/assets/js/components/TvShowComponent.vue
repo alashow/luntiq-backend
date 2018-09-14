@@ -25,10 +25,12 @@
                     </b-form-checkbox>
                 </b-btn>
             </div>
+
             <b-button-group class="ml-sm-1 my-1">
                 <b-btn v-b-toggle="'seasons'+show.id" variant="success">
                     {{ $t('show.seasons') }}
                 </b-btn>
+                <shows-status-popover-component :show="show.id"></shows-status-popover-component>
             </b-button-group>
         </b-button-toolbar>
 
@@ -47,9 +49,10 @@
                             </b-btn>
 
                             <b-btn variant="primary" :disabled="season.loading" @click="toggleSeason(season.id)">
-                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll')
-                                }}
+                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll') }}
                             </b-btn>
+
+                            <shows-status-popover-component :season="season.id"></shows-status-popover-component>
                         </div>
 
                         <b-table striped hover responsive
@@ -82,7 +85,10 @@
 </template>
 
 <script>
+    import ShowsStatusPopoverComponent from "./ShowsStatusPopoverComponent";
+
     export default {
+        components: {ShowsStatusPopoverComponent},
         props: ['tvshow'],
         data() {
             return {

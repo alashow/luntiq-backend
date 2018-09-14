@@ -9,6 +9,14 @@ trait HasFile
 {
     public function getStatus()
     {
+        $withProgress = function (&$status) {
+            if ($status['totalLength'] > 0) {
+                return array_merge($status, [
+                    'progress' => 100 / $status['totalLength'] * $status['completedLength'],
+                ]);
+            }
+            return $status;
+        };
         $checkFile = function () {
             $file = $this->buildFullPath();
             if (@file_exists($file)) {
@@ -21,23 +29,29 @@ trait HasFile
             } else {
                 return [
                     'status'          => 'not_found',
-                    'totalLength'     => 0,
+                    'totalLength'     => $this->file->size,
                     'completedLength' => 0,
                     'downloadSpeed'   => 0,
                 ];
             }
         };
 
+        $status = null;
         if ($this->file->download_id != null) {
             $statuses = resolve('Downloader')->check([$this]);
             if (! empty($statuses)) {
-                return $statuses[0];
-            } else {
-                return $checkFile();
+                $status = $statuses[0];
+                $status = [
+                    'status'          => $status->status,
+                    'totalLength'     => intval($status->totalLength),
+                    'completedLength' => intval($status->completedLength),
+                    'downloadSpeed'   => intval($status->downloadSpeed),
+                ];
             }
-        } else {
-            return $checkFile();
         }
+
+        $status = $status ?: $checkFile();
+        return $withProgress($status);
     }
 
     public function scopeByFile(Builder $builder, array $premIds)
