@@ -1,19 +1,19 @@
 <template>
     <div class="py-4">
-        <b-button size="medium" variant="primary" class="mb-4"
-                  :disabled="loading"
-                  @click="load">
-            <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
-            {{ $t('refresh') }}
-        </b-button>
+        <div>
+            <b-button variant="primary" :disabled="loading" @click="load">
+                <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
+                {{ $t('refresh') }}
+            </b-button>
 
-        <b-button size="medium" variant="primary" class="mb-4"
-                  :disabled="loading"
-                  @click="toggleAll">
-            {{ toggleAllValue ? $t('movie.enableAll') : $t('movie.disableAll') }}
-        </b-button>
+            <b-button variant="primary" :disabled="loading" @click="toggleAll">
+                {{ toggleAllValue ? $t('movie.enableAll') : $t('movie.disableAll') }}
+            </b-button>
 
-        <b-table striped hover responsive
+            <library-stats-component></library-stats-component>
+        </div>
+
+        <b-table striped hover responsive class="my-4"
                  v-if="movies.length > 0"
                  :items="movies"
                  :fields="fields">

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::group(['prefix' => 'downloads'], function () {
             Route::get('check/{file}', 'Api\DownloadsController@check')->name('downloads.check');
+            Route::get('library', 'Api\DownloadsController@library')->name('downloads.library');
             Route::get('shows', 'Api\DownloadsController@shows')->name('downloads.shows');
         });
     });

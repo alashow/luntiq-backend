@@ -65,6 +65,14 @@ export default {
             }
         },
 
+        'libraryStats': {
+            'label': 'Library File Stats',
+            'folder': 'Folder',
+            'count': 'File Count',
+            'size': 'Total Size',
+            'average': 'Average Size',
+        },
+
         'errors': {
             'network': {
                 'title': 'Network Error',

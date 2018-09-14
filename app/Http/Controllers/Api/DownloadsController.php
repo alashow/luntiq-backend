@@ -47,6 +47,41 @@ class DownloadsController extends BaseApiController
     }
 
     /**
+     * Returns count, size and average size for each media library folder.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function library()
+    {
+        $build = function ($folder) {
+            $count = intval(shell_exec("find $folder -type f | wc -l"));
+            $size = intval(shell_exec("find $folder -ls | awk '{sum += $7; n++;} END {print sum}'"));
+
+            $average = 0;
+            if ($count > 0) {
+                $average = round($size / $count);
+            }
+
+            return [
+                'folder'  => $folder,
+                'count'   => $count,
+                'size'    => $size,
+                'average' => $average,
+            ];
+        };
+
+        $folders = [
+            config('luntiq.downloads.folders.movies'), config('luntiq.downloads.folders.shows'),
+        ];
+
+        return $this->ok([
+            'library' => array_map(function ($folder) use ($build) {
+                return $build($folder);
+            }, $folders),
+        ]);
+    }
+
+    /**
      * Get status stats of episodes on different levels.
      * Request params: all = all episodes, show = show id, season = season id
      * At least one of them is required and only one of them will be served at a time on level order.

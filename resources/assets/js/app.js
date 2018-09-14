@@ -31,6 +31,7 @@ Vue.component('tvshow-component', require('./components/TvShowComponent.vue'));
 Vue.component('media-popover-component', require('./components/MediaPopoverComponent'));
 Vue.component('media-component', require('./components/MediaComponent'));
 Vue.component('status-popover-component', require('./components/StatusPopoverComponent'));
+Vue.component('library-stats-component', require('./components/LibraryStatsComponent'));
 
 export default new Vue({router, i18n}).$mount('#app');
 
