@@ -54,8 +54,8 @@ class DownloadsController extends BaseApiController
     public function library()
     {
         $build = function ($folder) {
-            $count = intval(shell_exec("find $folder -type f | wc -l"));
-            $size = intval(shell_exec("find $folder -ls | awk '{sum += $7; n++;} END {print sum}'"));
+            $count = intval(shell_exec("find $folder -size +100k -type f | wc -l"));
+            $size = intval(shell_exec("find $folder -size +100k -ls | awk '{sum += $7; n++;} END {print sum}'"));
 
             $average = 0;
             if ($count > 0) {
