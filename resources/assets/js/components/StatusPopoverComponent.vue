@@ -24,6 +24,10 @@
                     <status-progress-component :status="status"></status-progress-component>
                 </li>
             </ul>
+
+            <b-form-checkbox v-model="autoRefresh" @change="toggleAutoRefresh">
+                {{ $t('autoRefresh') }}
+            </b-form-checkbox>
         </b-popover>
     </div>
 </template>
@@ -37,7 +41,9 @@
         data() {
             return {
                 status: {},
-                targetId: 'file_' + this.file
+                targetId: 'file_' + this.file,
+                autoRefresh: false,
+                refreshIntervalId: -1
             }
         },
         methods: {
@@ -46,8 +52,21 @@
                     .then(function (response) {
                         this.status = response.data.data.status;
                         this.$refs.popover.$emit('open');
+                        this.stopAutoRefreshIfComplete();
                     }.bind(this))
             },
-        }
+            toggleAutoRefresh(enable) {
+                window.clearInterval(this.refreshIntervalId);
+                if (enable) {
+                    this.refreshIntervalId = setInterval(() => this.check(), 1000);
+                }
+            },
+            stopAutoRefreshIfComplete() {
+                if (this.status.status === 'complete') {
+                    this.autoRefresh = false;
+                    this.toggleAutoRefresh(false)
+                }
+            }
+        },
     }
 </script>

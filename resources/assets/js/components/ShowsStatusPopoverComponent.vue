@@ -21,8 +21,9 @@
                 <li>{{ $t('status.shows.size.downloading') }}: {{ status.size.downloading | bytes }}</li>
                 <li>{{ $t('status.speed') }}: {{ status.speed | bytesSpeed }}</li>
             </ul>
+
             <b-form-checkbox v-model="autoRefresh" @change="toggleAutoRefresh">
-                {{ $t('status.shows.autoRefresh') }}
+                {{ $t('autoRefresh') }}
             </b-form-checkbox>
         </b-popover>
     </b-btn>
@@ -34,9 +35,9 @@
         data() {
             return {
                 status: {},
+                targetId: 'shows_status_' + this.season + this.show + this.all,
                 autoRefresh: false,
-                intervalId: -1,
-                targetId: 'shows_status_' + this.season + this.show + this.all
+                refreshIntervalId: -1,
             }
         },
         methods: {
@@ -53,9 +54,9 @@
                     }.bind(this))
             },
             toggleAutoRefresh(enable) {
-                window.clearInterval(this.intervalId);
+                window.clearInterval(this.refreshIntervalId);
                 if (enable) {
-                    this.intervalId = setInterval(() => this.check(), 1000)
+                    this.refreshIntervalId = setInterval(() => this.check(), 1000);
                 }
             }
         }

@@ -3,6 +3,7 @@ export default {
         'movies': 'Movies',
         'tvShows': 'TV Shows',
         'refresh': 'Refresh',
+        'autoRefresh': 'Auto refresh',
 
         'movie': {
             'title': 'Title',
@@ -61,7 +62,6 @@ export default {
                     'downloaded': 'Downloaded',
                     'downloading': 'Downloading',
                 },
-                'autoRefresh': 'Auto refresh'
             }
         },
 
