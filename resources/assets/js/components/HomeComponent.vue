@@ -11,13 +11,5 @@
 
 <script>
     export default {
-        mounted() {
-
-        },
-        methods: {
-            load() {
-
-            }
-        }
     }
 </script>

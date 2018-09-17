@@ -1,16 +1,16 @@
 <template>
     <div class="py-4">
         <div>
-            <b-button variant="primary" :disabled="loading" @click="load">
+            <b-button variant="primary" class="mr-1 mt-1" :disabled="loading" @click="load">
                 <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
                 {{ $t('refresh') }}
             </b-button>
 
-            <b-button variant="primary" :disabled="loading" @click="toggleAll">
+            <b-button variant="primary" class="mr-1 mt-1" :disabled="loading" @click="toggleAll">
                 {{ toggleAllValue ? $t('movie.enableAll') : $t('movie.disableAll') }}
             </b-button>
 
-            <library-stats-component></library-stats-component>
+            <library-stats-component class="mt-1"></library-stats-component>
         </div>
 
         <b-table striped hover responsive class="mt-3"

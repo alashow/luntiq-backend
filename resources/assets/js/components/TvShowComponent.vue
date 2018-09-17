@@ -1,38 +1,31 @@
 <template>
     <div>
-        <div class="py-4">
-            <media-component
-                    :label="show.name"
-                    :overview="show.overview"
-                    :poster="show.poster_path">
-            </media-component>
+        <div class="py-2">
+            <media-component :label="show.name" :overview="show.overview" :poster="show.poster_path"></media-component>
         </div>
 
-        <b-button-toolbar>
-            <div class="my-1">
-                <b-btn variant="primary" :disabled="loading" @click="refresh">
-                    <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
-                    {{ $t('refresh') }}
-                </b-btn>
+        <div>
+            <b-btn variant="primary" class="mr-1 mt-1" :disabled="loading" @click="refresh">
+                <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
+                {{ $t('refresh') }}
+            </b-btn>
 
-                <b-btn variant="primary" :disabled="loading" @click="toggleDownload(true)">
-                    {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
-                </b-btn>
+            <b-btn variant="primary" class="mr-1 mt-1" :disabled="loading" @click="toggleDownload(true)">
+                {{ toggleAllValue ? $t('show.enableAll') : $t('show.disableAll') }}
+            </b-btn>
 
-                <b-btn variant="primary" :disabled="loading">
-                    <b-form-checkbox v-model="show.download" @change="toggleDownload(false)">
-                        {{ $t('show.download') }}
-                    </b-form-checkbox>
-                </b-btn>
-            </div>
+            <b-btn variant="primary" class="mr-1 mt-1" :disabled="loading">
+                <b-form-checkbox v-model="show.download" @change="toggleDownload(false)">
+                    {{ $t('show.download') }}
+                </b-form-checkbox>
+            </b-btn>
 
-            <b-button-group class="ml-sm-1 my-1">
-                <b-btn v-b-toggle="'seasons'+show.id" variant="success">
-                    {{ $t('show.seasons') }}
-                </b-btn>
-                <shows-status-popover-component :show="show.id"></shows-status-popover-component>
-            </b-button-group>
-        </b-button-toolbar>
+            <b-btn variant="success" class="mr-1 mt-1" v-b-toggle="'seasons'+show.id">
+                {{ $t('show.seasons') }}
+            </b-btn>
+
+            <shows-status-popover-component class="mt-1" :show="show.id"></shows-status-popover-component>
+        </div>
 
         <b-collapse :id="'seasons'+show.id" v-if="show">
             <b-list-group v-for="season in show.seasons" :key="season.id" class="mt-3">
@@ -42,18 +35,17 @@
                     </b-list-group-item>
                     <b-collapse :id="'season'+season.id">
 
-                        <div class="py-3">
-                            <b-btn variant="primary" :disabled="season.loading" @click="refreshSeason(season.id)">
+                        <div class="py-2">
+                            <b-btn variant="primary" class="mr-1 mt-1" :disabled="season.loading" @click="refreshSeason(season.id)">
                                 <span class="fa fa-sync" v-bind:class="{ 'fa-spin': season.loading }"></span>
                                 {{ $t('refresh') }}
                             </b-btn>
 
-                            <b-btn variant="primary" :disabled="season.loading" @click="toggleSeason(season.id)">
-                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll')
-                                }}
+                            <b-btn variant="primary" class="mr-1 mt-1" :disabled="season.loading" @click="toggleSeason(season.id)">
+                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll') }}
                             </b-btn>
 
-                            <shows-status-popover-component :season="season.id"></shows-status-popover-component>
+                            <shows-status-popover-component class="mt-1" :season="season.id"></shows-status-popover-component>
                         </div>
 
                         <b-table striped hover responsive
