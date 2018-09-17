@@ -37,7 +37,7 @@
             </template>
         </b-table>
 
-        <b-alert show variant="danger" v-if="!loading && movies.length === 0">
+        <b-alert show variant="danger" v-if="!loading && movies.length === 0" class="my-4">
             {{ $t('movie.empty') }}
         </b-alert>
     </div>
