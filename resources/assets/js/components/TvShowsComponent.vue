@@ -1,16 +1,12 @@
 <template>
-    <div>
-        <div class="pt-4">
-            <b-btn size="medium" variant="primary"
-                   :disabled="loading"
-                   @click="load">
+    <div class="py-4">
+        <div>
+            <b-btn size="medium" variant="primary" :disabled="loading" @click="load">
                 <span class="fa fa-sync" v-bind:class="{ 'fa-spin': loading }"/>
                 {{ $t('shows.refresh') }}
             </b-btn>
 
-            <b-btn size="medium" variant="primary"
-                   :disabled="loading"
-                   @click="clearAll">
+            <b-btn size="medium" variant="primary" :disabled="loading" @click="clearAll">
                 <span class="fa fa-trash-alt"/>
                 {{ $t('shows.clearAll') }}
             </b-btn>
@@ -18,12 +14,10 @@
             <shows-status-popover-component :all="true"></shows-status-popover-component>
         </div>
 
-        <tvshow-component v-for="show in shows"
-                          :key="show.id"
-                          :tvshow="show">
-        </tvshow-component>
+        <tvshow-component class="mt-3" v-for="show in shows" :key="show.id" :tvshow="show"></tvshow-component>
 
-        <b-alert show variant="danger" class="mt-3" v-if="!loading && shows.length === 0">
+        <b-alert show variant="danger" class="mt-3"
+                 v-if="!loading && shows.length === 0">
             {{ $t('shows.empty') }}
         </b-alert>
     </div>

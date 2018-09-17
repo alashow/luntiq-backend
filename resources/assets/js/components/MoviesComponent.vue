@@ -13,10 +13,8 @@
             <library-stats-component></library-stats-component>
         </div>
 
-        <b-table striped hover responsive class="my-4"
-                 v-if="movies.length > 0"
-                 :items="movies"
-                 :fields="fields">
+        <b-table striped hover responsive class="mt-3"
+                 v-if="movies.length > 0" :items="movies" :fields="fields">
             <template slot="title" slot-scope="data">
                 <media-popover-component
                         prefix="movie"
@@ -37,7 +35,8 @@
             </template>
         </b-table>
 
-        <b-alert show variant="danger" v-if="!loading && movies.length === 0" class="my-4">
+        <b-alert show variant="danger" class="mt-3"
+                 v-if="!loading && movies.length === 0">
             {{ $t('movie.empty') }}
         </b-alert>
     </div>

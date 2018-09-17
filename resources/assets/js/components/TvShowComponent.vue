@@ -1,5 +1,5 @@
 <template>
-    <div class="py-4">
+    <div>
         <div class="py-4">
             <media-component
                     :label="show.name"
@@ -49,7 +49,8 @@
                             </b-btn>
 
                             <b-btn variant="primary" :disabled="season.loading" @click="toggleSeason(season.id)">
-                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll') }}
+                                {{ season.toggle ? $t('season.enableAll') : $t('season.disableAll')
+                                }}
                             </b-btn>
 
                             <shows-status-popover-component :season="season.id"></shows-status-popover-component>
