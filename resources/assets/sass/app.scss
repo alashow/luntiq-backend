@@ -6,6 +6,9 @@
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
+// player
+@import '~video.js/dist/video-js.css';
+@import 'skins/videojs-netflix';
 
 .popover {
   max-width: 800px;

@@ -40,6 +40,11 @@ export default {
             'download': 'Download',
         },
 
+        'actions': {
+            'title': 'Actions',
+            'play': 'Play'
+        },
+
         'status': {
             'title': 'Status',
             'state': 'State',

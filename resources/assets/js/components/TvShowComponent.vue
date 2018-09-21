@@ -61,8 +61,16 @@
                                 </media-popover-component>
                             </template>
 
-                            <template slot="status" slot-scope="data">
-                                <status-popover-component :file="data.item.file.id"/>
+                            <template slot="actions" slot-scope="data">
+                                <div class="row">
+                                    <status-popover-component class="mr-1 mt-1" :file="data.item.file.id"/>
+                                    <router-link :to="'/episode/'+data.item.id">
+                                        <b-button size="sm" variant="outline-primary" class="mt-1">
+                                            <span class="fa play"/>
+                                            {{ $t('actions.play') }}
+                                        </b-button>
+                                    </router-link>
+                                </div>
                             </template>
 
                             <template slot="download" slot-scope="data">
@@ -100,8 +108,8 @@
                         sortable: true
                     },
                     {
-                        key: 'status',
-                        label: this.$i18n.t('status.title'),
+                        key: 'actions',
+                        label: this.$i18n.t('actions.title'),
                         sortable: true
                     },
                     {

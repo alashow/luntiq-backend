@@ -68,7 +68,7 @@ class Episode extends Model implements DownloadableInterface
      */
     public function season()
     {
-        return $this->belongsTo(Show::class, 'season_id', 'tmdb_id');
+        return $this->belongsTo(Season::class, 'season_id', 'tmdb_id');
     }
 
     /**

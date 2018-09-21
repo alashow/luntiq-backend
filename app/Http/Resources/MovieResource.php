@@ -20,6 +20,7 @@ class MovieResource extends JsonResource
             'title'       => $this->title,
             'overview'    => $this->overview,
             'poster_path' => $this->poster_path,
+            'backdrop_path' => $this->backdrop_path,
             'download'    => boolval($this->download),
             'file'        => PremFileResource::make($this->file),
         ];

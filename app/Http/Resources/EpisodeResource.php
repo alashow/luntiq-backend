@@ -16,13 +16,14 @@ class EpisodeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'overview'    => $this->overview,
-            'episode'     => $this->episode_number,
-            'poster_path' => $this->poster_path,
-            'download'    => is_null($this->download) ? null : boolval($this->download),
-            'file'        => PremFileResource::make($this->file),
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'overview'      => $this->overview,
+            'episode'       => $this->episode_number,
+            'poster_path'   => $this->poster_path,
+            'backdrop_path' => $this->backdrop_path,
+            'download'      => is_null($this->download) ? null : boolval($this->download),
+            'file'          => PremFileResource::make($this->file),
         ];
     }
 }

@@ -32,6 +32,7 @@ Vue.component('media-popover-component', require('./components/MediaPopoverCompo
 Vue.component('media-component', require('./components/MediaComponent'));
 Vue.component('status-popover-component', require('./components/StatusPopoverComponent'));
 Vue.component('library-stats-component', require('./components/LibraryStatsComponent'));
+Vue.component('player-component', require('./components/PlayerComponent'));
 
 export default new Vue({router, i18n}).$mount('#app');
 

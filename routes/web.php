@@ -3,13 +3,20 @@
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@home')->name('home');
 
+    Route::get('sync', 'HomeController@sync')->name('sync');
+
     Route::group(['prefix' => 'api'], function () {
+        Route::get('library', 'LibraryController@index');
+
         Route::group(['prefix' => 'movies'], function () {
             Route::get('', 'Api\MoviesController@movies')->name('movies');
-            Route::patch('{movie}', 'Api\MoviesController@update')->name('movie.update');
             Route::post('toggleAll', 'Api\MoviesController@toggleAll')->name('movie.toggleAll');
+
+            Route::get('{movie}', 'Api\MoviesController@show')->name('movie');
+            Route::patch('{movie}', 'Api\MoviesController@update')->name('movie.update');
         });
 
         Route::group(['prefix' => 'shows'], function () {
@@ -27,6 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::group(['prefix' => 'episodes'], function () {
+            Route::get('{episode}', 'Api\EpisodesController@show')->name('episode');
             Route::patch('{episode}', 'Api\EpisodesController@update')->name('episode.update');
         });
 
@@ -40,7 +48,4 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('shows', 'Api\DownloadsController@shows')->name('downloads.shows');
         });
     });
-
-    Route::get('sync', 'HomeController@sync')->name('sync');
-    Route::get('/', 'HomeController@index');
 });

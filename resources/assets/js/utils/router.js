@@ -2,6 +2,8 @@ import VueRouter from "vue-router";
 
 const movies = require('../components/MoviesComponent.vue');
 const tvShows = require('../components/TvShowsComponent');
+const movie = require('../components/MovieComponent');
+const episode = require('../components/EpisodeComponent');
 
 var routes = [
     {
@@ -15,6 +17,16 @@ var routes = [
     {
         path: '/tvshows',
         component: tvShows
+    },
+    {
+        path: '/movie/:id',
+        component: movie,
+        props: true
+    },
+    {
+        path: '/episode/:id',
+        component: episode,
+        props: true
     }
 ];
 

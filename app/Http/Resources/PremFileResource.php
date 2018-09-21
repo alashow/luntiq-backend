@@ -16,7 +16,9 @@ class PremFileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id'          => $this->id,
+            'link'        => $this->link,
+            'stream_link' => $this->stream_link,
         ];
     }
 }
