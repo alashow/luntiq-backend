@@ -5909,7 +5909,7 @@ videojs-font@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/videojs-font/-/videojs-font-2.1.0.tgz#a25930a67f6c9cfbf2bb88dacb8c6b451f093379"
 
-videojs-hotkeys@^0.2.20:
+videojs-hotkeys@^0.2.20, videojs-hotkeys@^0.2.22:
   version "0.2.22"
   resolved "https://registry.yarnpkg.com/videojs-hotkeys/-/videojs-hotkeys-0.2.22.tgz#76f917b1a70e7bf9da5f7f8cd33d5a032c0284be"
 

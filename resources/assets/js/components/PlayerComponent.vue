@@ -5,13 +5,15 @@
                     class="video-player-box"
                     ref="videoPlayer"
                     :options="playerOptions"
-                    :playsinline="true"/>
+                    :playsinline="true"
+                    @ready="onReady"/>
         </div>
     </div>
 </template>
 
 <script>
     import {videoPlayer} from 'vue-video-player'
+    import 'videojs-hotkeys'
 
     export default {
         components: {videoPlayer},
@@ -19,6 +21,11 @@
         data() {
             return {
                 playerOptions: {},
+            }
+        },
+        computed: {
+            player() {
+                return this.$refs.videoPlayer.player
             }
         },
         mounted() {
@@ -34,6 +41,15 @@
                 }],
                 poster: this.$options.filters.tmdbImage(this.poster, 'original'),
             };
+        },
+        methods: {
+            onReady(player){
+                player.hotkeys({
+                    volumeStep: 0.1,
+                    seekStep: 5,
+                    enableModifiersForNumbers: false
+                });
+            }
         }
     }
 </script>
