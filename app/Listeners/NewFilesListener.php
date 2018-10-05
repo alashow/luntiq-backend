@@ -159,6 +159,10 @@ class NewFilesListener
             }
 
             $episodeResult = $this->getEpisode($seasonResult, $guessed);
+            // try getting from episode api if it's not in season result
+            if ($episodeResult == null) {
+                $episodeResult = $this->tmdbClient->getTvEpisodeApi()->getEpisode($firstShowResult['id'], $guessed->season, $guessed->episode);
+            }
             if ($episodeResult != null) {
                 $episode = Episode::build($episodeResult, $seasonResult, $firstShowResult, $premFile);
                 $saved = $episode->safeSave();
