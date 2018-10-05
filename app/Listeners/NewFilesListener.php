@@ -55,15 +55,19 @@ class NewFilesListener
             }
 
             $scanned = false;
-            switch ($guessed->type) {
-                case 'movie':
-                    $scanned = $this->handleMovie($premFile, $guessed);
-                    break;
-                case 'episode':
-                    $scanned = $this->handleEpisode($premFile, $guessed);
-                    break;
-                default:
-                    Log::warning('Guessed files type was unknown', [$guessed, $premFile]);
+            try {
+                switch ($guessed->type) {
+                    case 'movie':
+                        $scanned = $this->handleMovie($premFile, $guessed);
+                        break;
+                    case 'episode':
+                        $scanned = $this->handleEpisode($premFile, $guessed);
+                        break;
+                    default:
+                        Log::warning('Guessed files type was unknown', [$guessed, $premFile]);
+                }
+            } catch (Exception $e) {
+                Log::error('Caught an exception while handling media.', [$e, $premFile, $guessed]);
             }
 
             $premFile->setScanned($scanned);
