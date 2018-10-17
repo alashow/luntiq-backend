@@ -21,4 +21,20 @@ class GuessIt
         $itemName = escapeshellarg(sprintf('%s/%s', $premFile->folder, $premFile->name));
         return json_decode(shell_exec("$command -j {$itemName}"));
     }
+
+    /**
+     * Get title from guessed object.
+     *
+     * @param $guessed
+     *
+     * @return string
+     */
+    public static function getTitle($guessed)
+    {
+        if (is_array($guessed->title)) {
+            return $guessed->title[0];
+        } else {
+            return $guessed->title;
+        }
+    }
 }

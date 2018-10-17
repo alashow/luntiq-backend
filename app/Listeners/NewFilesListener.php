@@ -8,6 +8,7 @@ use Tmdb\Client;
 use App\Model\Show;
 use App\Model\Movie;
 use App\Model\Season;
+use App\Util\GuessIt;
 use App\Model\Episode;
 use App\Model\PremFile;
 use App\Events\FilesAddedEvent;
@@ -89,7 +90,7 @@ class NewFilesListener
             $params['year'] = $guessed->year;
         }
 
-        $results = collect($this->tmdbClient->getSearchApi()->searchMovies($guessed->title, $params)['results']);
+        $results = collect($this->tmdbClient->getSearchApi()->searchMovies(GuessIt::getTitle($guessed), $params)['results']);
         if ($results->isNotEmpty()) {
             $movieResult = $results->first();
             $movie = Movie::build($movieResult, $premFile, $guessed);
@@ -126,7 +127,7 @@ class NewFilesListener
         }
 
         Log::info('Searching show for a file: '.$premFile->name);
-        $results = collect($this->tmdbClient->getSearchApi()->searchTv($guessed->title)['results']);
+        $results = collect($this->tmdbClient->getSearchApi()->searchTv(GuessIt::getTitle($guessed))['results']);
         if ($results->isNotEmpty()) {
             $firstShowResult = $results->first();
             if (! Show::exists($firstShowResult)) {
