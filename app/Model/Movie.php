@@ -78,7 +78,7 @@ class Movie extends Model implements DownloadableInterface
         $year = substr($this->release_date, 0, 4);
         $fileExtension = pathinfo($this->file->name)['extension'];
 
-        return sprintf('%s (%s).%s', $title, $year, $fileExtension);
+        return sanitizeFileName(sprintf('%s (%s).%s', $title, $year, $fileExtension));
     }
 
     /**

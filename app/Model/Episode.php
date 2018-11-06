@@ -124,9 +124,9 @@ class Episode extends Model implements DownloadableInterface
         $episodeName = $this->name;
         $fileExtension = pathinfo($this->file->name)['extension'];
 
-        return sprintf('%s - s%02de%02d - %s.%s',
+        return sanitizeFileName(sprintf('%s - s%02de%02d - %s.%s',
             $showName, $seasonNumber, $episodeNumber, $episodeName, $fileExtension
-        );
+        ));
     }
 
     /**

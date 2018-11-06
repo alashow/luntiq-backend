@@ -21,3 +21,19 @@ if (! function_exists('collect_merge')) {
         return $merged;
     }
 }
+
+if (! function_exists('sanitizeFileName')) {
+    function sanitizeFileName($dangerous_filename, $platform = 'Unix')
+    {
+        if (in_array(strtolower($platform), ['unix', 'linux'])) {
+            // our list of "dangerous characters", add/remove characters if necessary
+            $dangerous_characters = ['"', "'", "&", "/", "\\", "?", "#"];
+        } else {
+            // no OS matched? return the original filename then...
+            return $dangerous_filename;
+        }
+
+        // every forbidden character is replace by an underscore
+        return str_replace($dangerous_characters, '-', $dangerous_filename);
+    }
+}
