@@ -20,6 +20,7 @@ return [
             'mkv',
             'mp4',
             'avi',
+            'm4v',
         ],
 
         // files with these extensions form database will be added to movies and episodes
@@ -27,6 +28,7 @@ return [
             'mkv',
             'mp4',
             'avi',
+            'm4v',
         ],
     ],
 
