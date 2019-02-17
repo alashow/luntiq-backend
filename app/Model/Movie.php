@@ -62,11 +62,24 @@ class Movie extends Model implements DownloadableInterface
     }
 
     /**
+     * Movie's sanitized file name, without extension.
+     *
+     * @return string
+     */
+    public function buildMovieName()
+    {
+        $title = $this->title;
+        $year = substr($this->release_date, 0, 4);
+
+        return sanitizeFileName(sprintf('%s (%s)', $title, $year));
+    }
+
+    /**
      * @inheritdoc
      */
     public function buildFolderPath()
     {
-        return sprintf('%s', config('luntiq.downloads.folders.movies'));
+        return sprintf('%s/%s', config('luntiq.downloads.folders.movies'), $this->buildMovieName());
     }
 
     /**
@@ -74,11 +87,9 @@ class Movie extends Model implements DownloadableInterface
      */
     public function buildFileName()
     {
-        $title = $this->title;
-        $year = substr($this->release_date, 0, 4);
         $fileExtension = pathinfo($this->file->name)['extension'];
 
-        return sanitizeFileName(sprintf('%s (%s).%s', $title, $year, $fileExtension));
+        return sanitizeFileName(sprintf('%s.%s', $this->buildMovieName(), $fileExtension));
     }
 
     /**
