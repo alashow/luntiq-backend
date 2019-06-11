@@ -16,7 +16,7 @@ return [
 
     'files' => [
         // files with these extensions will be added to files database
-        'supported' => [
+        'supported'              => [
             'mkv',
             'mp4',
             'avi',
@@ -24,12 +24,16 @@ return [
         ],
 
         // files with these extensions form database will be added to movies and episodes
-        'videos'    => [
+        'videos'                 => [
             'mkv',
             'mp4',
             'avi',
             'm4v',
         ],
+        // ~max duration of short films. movie won't be considered as invalid if it's smaller than min size but shorter than this
+        'movie_min_size_minutes' => 45,
+
+        'movie_min_size' => 200 * 1024 * 1024,
     ],
 
     'tmdb' => [
@@ -57,7 +61,7 @@ return [
 
         'ghost' => [
             'enabled' => env('DOWNLOADS_GHOST_ENABLED', false),
-            'path'   => env('DOWNLOADS_GHOST_MEDIA_ROOT', storage_path('app/media-ghost/')),
+            'path'    => env('DOWNLOADS_GHOST_MEDIA_ROOT', storage_path('app/media-ghost/')),
         ],
     ],
 

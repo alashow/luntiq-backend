@@ -38,7 +38,7 @@ class NewFilesListener
     /**
      * Handle the event.
      *
-     * @param  FilesAddedEvent $event
+     * @param FilesAddedEvent $event
      *
      * @return void
      */
@@ -93,6 +93,12 @@ class NewFilesListener
         $results = collect($this->tmdbClient->getSearchApi()->searchMovies(GuessIt::getTitle($guessed), $params)['results']);
         if ($results->isNotEmpty()) {
             $movieResult = $results->first();
+
+            // validate and return if not valid
+            if (! $this->validateMovie($premFile, $guessed, $movieResult)) {
+                return false;
+            }
+
             $movie = Movie::build($movieResult, $premFile, $guessed);
             $saved = $movie->safeSave();
 
@@ -104,6 +110,36 @@ class NewFilesListener
             ]);
         }
         return false;
+    }
+
+    /**
+     * Validate movie before saving.
+     *
+     * @param PremFile  $premFile
+     * @param \stdClass $guessed
+     * @param array     $movieResult
+     *
+     * @return bool valid if true
+     */
+    private function validateMovie(PremFile $premFile, \stdClass $guessed, array $movieResult)
+    {
+        // invalid if movie's file size is smaller min size
+        // but not if it's a short film
+        $minSize = config('luntiq.files.movie_min_size');
+        if ($minSize > $premFile->size) {
+            $movieResult = $this->tmdbClient->getMoviesApi()->getMovie($movieResult['id']);
+            $runtime = $movieResult['runtime'] ?: 60;
+            $minRuntime = config('luntiq.files.movie_min_size_minutes');
+
+            if ($runtime > $minRuntime) {
+                Log::warning("This guessed movie is just a sample or something (too small for a non-short movie)", [
+                    $premFile, $guessed,
+                ]);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
