@@ -41,13 +41,13 @@ return [
     ],
 
     'downloads' => [
-        'enabled'              => env('DOWNLOADS_ENABLED', false),
+        'enabled' => env('DOWNLOADS_ENABLED', false),
 
-        # mark new items for downloading
         'enable_for_new_media' => env('DOWNLOADS_ENABLE_FOR_NEW_MEDIA', false),
+        # mark new items for downloading
 
+        'clean_removed' => env('DOWNLOADS_CLEAN_REMOVED', false),
         // clean downloaded files when it's removed in cloud
-        'clean_removed'        => env('DOWNLOADS_CLEAN_REMOVED', false),
 
         'folders' => [
             'movies' => sprintf('%s/movies', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),
@@ -57,11 +57,6 @@ return [
         'aria2' => [
             'host'  => env('DOWNLOADS_ARIA2_HOST', 'http://localhost:6800'),
             'token' => env('DOWNLOADS_ARIA2_TOKEN'),
-        ],
-
-        'ghost' => [
-            'enabled' => env('DOWNLOADS_GHOST_ENABLED', false),
-            'path'    => env('DOWNLOADS_GHOST_MEDIA_ROOT', storage_path('app/media-ghost/')),
         ],
     ],
 

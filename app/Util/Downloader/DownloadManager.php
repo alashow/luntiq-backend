@@ -46,11 +46,6 @@ class DownloadManager
                 'name'   => $item->buildFileName(),
                 'url'    => $item->getFile()->link,
             ];
-
-            // create empty file with item name if ghosting enabled
-            if (config('luntiq.downloads.ghost.enabled')) {
-                touch(sprintf("%s/%s", config('luntiq.downloads.ghost.path'), $item->buildFileName()));
-            }
         }
 
         return $this->aria2Client->download($files);
