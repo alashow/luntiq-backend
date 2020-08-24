@@ -185,7 +185,7 @@ class SyncDownloads extends Command
                 case 'waiting':
                 case 'removed':
                     $this->info("File '{$fileName}' has status: '{$status}'");
-                    continue;
+                    continue 2;
                 default:
                     $this->info("File '{$fileName}' has complete or unknown status: '{$status}', checking existence.");
                     if (! @file_exists($item->buildFullPath())) {
@@ -196,7 +196,7 @@ class SyncDownloads extends Command
                     } else {
                         $this->info("File '{$fileName}' was found in the storage.");
                         $this->removeDownloadedMedia($item);
-                        continue;
+                        continue 2;
                     }
             }
         }
@@ -232,7 +232,7 @@ class SyncDownloads extends Command
                         if (@file_exists($item->buildFullPath())) {
                             $this->info("File '{$fileName}' has been downloaded, removing from premiumize");
                             $this->removeDownloadedMedia($item);
-                            continue;
+                            continue 2;
                         }
                 }
             }

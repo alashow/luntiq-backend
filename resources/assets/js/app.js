@@ -26,13 +26,13 @@ const i18n = new VueI18n({
     messages
 });
 
-Vue.component('home-component', require('./components/HomeComponent.vue'));
-Vue.component('tvshow-component', require('./components/TvShowComponent.vue'));
-Vue.component('media-popover-component', require('./components/MediaPopoverComponent'));
-Vue.component('media-component', require('./components/MediaComponent'));
-Vue.component('status-popover-component', require('./components/StatusPopoverComponent'));
-Vue.component('library-stats-component', require('./components/LibraryStatsComponent'));
-Vue.component('player-component', require('./components/PlayerComponent'));
+Vue.component('home-component', require('./components/HomeComponent.vue').default);
+Vue.component('tvshow-component', require('./components/TvShowComponent.vue').default);
+Vue.component('media-popover-component', require('./components/MediaPopoverComponent').default);
+Vue.component('media-component', require('./components/MediaComponent').default);
+Vue.component('status-popover-component', require('./components/StatusPopoverComponent').default);
+Vue.component('library-stats-component', require('./components/LibraryStatsComponent').default);
+Vue.component('player-component', require('./components/PlayerComponent').default);
 
 export default new Vue({router, i18n}).$mount('#app');
 
