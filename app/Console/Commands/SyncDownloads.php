@@ -6,6 +6,7 @@ use Log;
 use App\Model\Movie;
 use App\Model\Episode;
 use App\Model\PremFile;
+use App\Util\PremClient;
 use App\Util\DownloadManager;
 use Illuminate\Console\Command;
 
@@ -30,6 +31,11 @@ class SyncDownloads extends Command
      */
     protected $downloader;
 
+    /**
+     * @var PremClient
+     */
+    protected $premClient;
+
     protected $movies;
     protected $episodes;
     protected $checkedMovies;
@@ -41,10 +47,12 @@ class SyncDownloads extends Command
      * SyncDownloads constructor.
      *
      * @param DownloadManager $downloader
+     * @param PremClient      $premClient
      */
-    public function __construct(DownloadManager $downloader)
+    public function __construct(DownloadManager $downloader, PremClient $premClient)
     {
         parent::__construct();
+        $this->premClient = $premClient->getClient();
         $this->downloader = $downloader;
 
         $this->checkedMovies = collect();
@@ -80,7 +88,8 @@ class SyncDownloads extends Command
         try {
             $this->disposeUnchecked();
             $this->startChecked();
-            $this->cleanUpFailed();
+            $this->cleanUpCompleted();
+            $this->cleanUp();
         } catch (\Exception $exception) {
             $this->warn('Error while syncing: '.$exception->getMessage());
             Log::error('Error while syncing downloads', [$exception]);
@@ -142,7 +151,7 @@ class SyncDownloads extends Command
         ]);
     }
 
-    private function cleanUpFailed()
+    private function cleanUp()
     {
         $items = collect_merge($this->movies, $this->episodes)->filter(function ($item) {
             return $item->file->download_id != null;
@@ -186,6 +195,7 @@ class SyncDownloads extends Command
                         $resync = true;
                     } else {
                         $this->info("File '{$fileName}' was found in the storage.");
+                        $this->removeDownloadedMedia($item);
                         continue;
                     }
             }
@@ -193,6 +203,55 @@ class SyncDownloads extends Command
 
         if ($resync) {
             $this->handle();
+        }
+    }
+
+    private function cleanUpCompleted()
+    {
+        if (config('luntiq.downloads.clean_completed')) {
+            $this->info("Cleaning up completed downloads");
+
+            $items = collect_merge($this->movies, $this->episodes)->filter(function ($item) {
+                return $item->file->download_id != null;
+            });
+
+            $tasks = $this->downloader->check($items);
+
+            foreach ($items as $item) {
+                $task = array_first(array_filter($tasks, function ($task) use ($item) {
+                    return $task->gid == $item->file->download_id;
+                }));
+
+                $status = $task ? $task->status : null;
+                $fileName = $item->buildFileName();
+                switch ($status) {
+                    case 'active':
+                    case 'waiting':
+                    case 'removed':
+                    default:
+                        if (@file_exists($item->buildFullPath())) {
+                            $this->info("File '{$fileName}' has been downloaded, removing from premiumize");
+                            $this->removeDownloadedMedia($item);
+                            continue;
+                        }
+                }
+            }
+        }
+    }
+
+    private function removeDownloadedMedia($item)
+    {
+        $folderId = ($item instanceof Movie) ? $item->file->folder_id : null;
+        $hasFolder = $folderId != null;
+        $itemId = $folderId ?: $item->file->prem_id;
+        $apiEndpoint = ($hasFolder ? 'folder/delete' : 'item/delete');
+
+        $result = json_decode($this->premClient->get($apiEndpoint, [
+            'query' => ['id' => $itemId],
+        ])->getBody());
+
+        if ($result->status == 'success') {
+            $this->info("Media item '{$item->file->name}' was removed from premiumize.");
         }
     }
 }
