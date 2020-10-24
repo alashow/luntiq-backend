@@ -52,8 +52,8 @@ return [
         'clean_completed' => env('DOWNLOADS_CLEAN_COMPLETED', false),
 
         'folders' => [
-            'movies' => sprintf('%s/movies', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),
-            'shows'  => sprintf('%s/shows', env('DOWNLOADS_MEDIA_ROOT', storage_path('app/media/'))),
+            'movies' => env('DOWNLOADS_MEDIA_PATH_MOVIES', storage_path('app/media/movies')),
+            'shows'  => env('DOWNLOADS_MEDIA_PATH_SHOWS', storage_path('app/media/shows')),
         ],
 
         'aria2' => [
